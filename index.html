@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YAI Governance Radar</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+:root { color-scheme: light;
+  --paper:#faf6ef; --card:#fffdf8; --ink:#231f1a; --muted:#8a7f72; --hair:#e6ddcd;
+  --plum:#6d1f4e; --plumbg:#f5e6ee; --plumdark:#4c1436;
+  --amber:#96660f; --amberbg:#f6ead0; --green:#3f6b3a; --greenbg:#e6efe0;
+  --red:#a33434; --redbg:#f6e2df; --blue:#31567f; --bluebg:#e3ebf3;
+  --teal:#2f6b62; --tealbg:#e1eeea; --gray:#6b6257; --graybg:#ebe4d8;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:14px}
+a{color:var(--plum)}
+.shell{display:flex;min-height:100vh}
+/* ---- sidebar ---- */
+.side{width:216px;flex-shrink:0;background:var(--card);border-right:1px solid var(--hair);padding:26px 18px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+.mono{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--plum);letter-spacing:1px}
+.brand{font-family:var(--serif);font-size:17px;font-weight:700;line-height:1.25;margin-top:2px}
+.tagline{font-size:10.5px;color:var(--muted);letter-spacing:1.6px;text-transform:uppercase;margin:8px 0 18px;line-height:1.6}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{text-align:left;background:none;border:none;font-family:var(--serif);font-size:14.5px;color:var(--ink);padding:9px 10px;border-left:2px solid transparent;cursor:pointer;border-radius:0 8px 8px 0}
+.nav button:hover{background:var(--plumbg)}
+.nav button.active{border-left-color:var(--plum);color:var(--plum);font-weight:700;background:var(--plumbg)}
+.nav .n-sub{font-size:10px;color:var(--muted);font-family:var(--sans);display:block;letter-spacing:.5px}
+.side .foot{margin-top:auto;font-size:10.5px;color:var(--muted);line-height:1.7;border-top:1px solid var(--hair);padding-top:12px}
+/* ---- main ---- */
+.main{flex:1;min-width:0;padding:30px 34px 60px}
+.mast{border-bottom:3px double var(--hair);padding-bottom:18px;margin-bottom:18px}
+.mast .kick{font-size:10px;letter-spacing:2.8px;text-transform:uppercase;color:var(--plum);font-weight:700;margin-bottom:8px}
+.mast h1{font-family:var(--serif);font-size:31px;font-weight:700;letter-spacing:.2px}
+.mast .date{font-size:12px;color:var(--muted);margin-top:6px;font-style:italic;font-family:var(--serif)}
+.statline{display:flex;gap:0;flex-wrap:wrap;margin-top:16px}
+.stat{padding:0 22px;border-left:1px solid var(--hair)}
+.stat:first-child{border-left:none;padding-left:0}
+.stat b{display:block;font-family:var(--serif);font-size:24px;color:var(--plum)}
+.stat span{font-size:9.5px;letter-spacing:1.4px;color:var(--muted);text-transform:uppercase}
+.disclaimer{font-size:11.5px;color:var(--muted);font-style:italic;font-family:var(--serif);margin-bottom:20px;line-height:1.6}
+/* ---- panels ---- */
+.panel{background:var(--card);border:1px solid var(--hair);border-radius:4px;padding:18px 20px;margin-bottom:16px}
+.ph{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.ph h2{font-family:var(--serif);font-size:17px;font-weight:700}
+.ph .sub{font-size:11.5px;color:var(--muted);font-style:italic;font-family:var(--serif)}
+.winbtns button{background:none;border:none;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;padding:2px 7px;font-family:var(--sans)}
+.winbtns button.on{color:var(--plum);text-decoration:underline;text-underline-offset:4px;font-weight:700}
+/* ---- timeline radar ---- */
+.tl{position:relative;margin-left:6px}
+.tl:before{content:"";position:absolute;left:96px;top:6px;bottom:6px;width:1px;background:var(--hair)}
+.tli{display:flex;gap:0;align-items:flex-start;padding:7px 0;cursor:pointer}
+.tli:hover .tl-nm{color:var(--plum)}
+.tl-date{width:82px;flex-shrink:0;text-align:right;font-family:var(--serif);font-size:12px;color:var(--muted);padding-top:1px}
+.tl-dot{width:29px;flex-shrink:0;display:flex;justify-content:center;padding-top:4px}
+.tl-dot i{width:9px;height:9px;border-radius:50%;background:var(--gray);display:block;border:2px solid var(--card);box-shadow:0 0 0 1px var(--hair)}
+.tli.u30 .tl-dot i{background:var(--red)}.tli.u90 .tl-dot i{background:#c2701e}.tli.u180 .tl-dot i{background:var(--blue)}.tli.u365 .tl-dot i{background:var(--green)}
+.tl-body{min-width:0}
+.tl-nm{font-family:var(--serif);font-size:14px;font-weight:700;line-height:1.3}
+.tl-jr{font-size:11.5px;color:var(--muted);margin-top:1px}
+.chip{display:inline-block;font-size:10px;font-weight:700;padding:1px 8px;border-radius:10px;margin-left:8px;vertical-align:1px;background:var(--plumbg);color:var(--plum)}
+.tli.u30 .chip{background:var(--redbg);color:var(--red)}
+/* ---- controls ---- */
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{background:none;border:1px solid var(--ink);border-radius:2px;padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;color:var(--ink);font-family:var(--sans)}
+.btn:hover{background:var(--ink);color:var(--card)}
+.btn.primary{background:var(--plum);border-color:var(--plum);color:#fff}
+.btn.primary:hover{background:var(--plumdark)}
+select.btn{text-transform:none;letter-spacing:.3px;font-weight:600}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.pill{background:none;border:1px solid var(--hair);border-radius:2px;padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer;color:var(--ink);font-family:var(--sans)}
+.pill:hover{border-color:var(--plum);color:var(--plum)}
+.pill.active{background:var(--plum);color:#fff;border-color:var(--plum)}
+.searchrow{display:flex;gap:8px;margin-bottom:10px}
+.searchrow input{flex:1;border:none;border-bottom:2px solid var(--hair);background:transparent;padding:9px 4px;font-size:14px;font-family:var(--serif)}
+.searchrow input:focus{outline:none;border-bottom-color:var(--plum)}
+.filters{display:none;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.filters.open{display:flex}
+.filters select{border:1px solid var(--hair);background:var(--card);border-radius:2px;padding:7px 10px;font-size:12px}
+.filters label{display:flex;align-items:center;gap:5px;font-size:12px;border:1px solid var(--hair);background:var(--card);border-radius:2px;padding:7px 10px}
+.count{font-size:11.5px;color:var(--muted);margin-bottom:8px;font-style:italic;font-family:var(--serif)}
+/* ---- table ---- */
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--hair)}
+thead th{font-size:9.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:2px solid var(--ink);cursor:pointer;user-select:none;background:var(--card)}
+tbody td{padding:13px 12px;border-bottom:1px solid var(--hair);vertical-align:top;font-size:13px}
+tbody tr{cursor:pointer}
+tbody tr:not(.detail):hover{background:var(--plumbg)}
+.lname{font-family:var(--serif);font-weight:700;font-size:14.5px;line-height:1.3}
+.lsum{color:var(--muted);font-size:12px;margin-top:3px;line-height:1.45;max-width:430px}
+.badge{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 0;white-space:nowrap;letter-spacing:.3px}
+.badge i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:0}
+.cat{display:inline-block;font-size:10.5px;border-bottom:1px solid var(--hair);padding:2px 0;color:var(--gray);white-space:nowrap;letter-spacing:.3px}
+.pra-y{color:var(--green);font-weight:700}.pra-n{color:#b3a897}
+.clrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.clrow .cl-lab{font-family:var(--serif);font-size:12.5px;font-weight:700;color:var(--plum);margin-right:2px}
+.cpill{background:none;border:1px solid var(--plum);border-radius:2px;padding:5px 11px;font-size:11.5px;font-weight:700;cursor:pointer;color:var(--plum);font-family:var(--sans)}
+.cpill.active{background:var(--plum);color:#fff}
+.cltag{display:inline-block;background:none;border:1px solid var(--plum);color:var(--plum);padding:1px 8px;font-size:10px;font-weight:700;letter-spacing:.5px;margin:0 4px 4px 0;border-radius:2px;cursor:pointer}
+.cltag:hover{background:var(--plum);color:#fff}
+.pilbanner{border-left:3px solid var(--plum);background:var(--plumbg);padding:10px 14px;margin-bottom:14px;font-size:12.5px;line-height:1.55}
+.pilbanner b{font-family:var(--serif)}
+.pilsec{border-top:3px solid var(--plum);background:var(--card);border:1px solid var(--hair);border-top:3px solid var(--plum);padding:18px 20px;margin-bottom:16px;scroll-margin-top:20px}
+.pilsec h3{font-family:var(--serif);font-size:19px}
+.pilsec .q{font-family:var(--serif);font-style:italic;color:var(--plum);font-size:14px;margin:4px 0 8px}
+.pilsec p{font-size:13px;line-height:1.6;color:#443d33}
+.pilsec ul{margin:10px 0 0 18px}
+.pilsec li{font-size:12.5px;line-height:1.7}
+.pilsec.flash{animation:pflash 1.6s ease}
+@keyframes pflash{0%{background:var(--plumbg)}100%{background:var(--card)}}
+.detail{display:none;background:#f6f0e4}
+.detail.open{display:table-row}
+.detail td{padding:16px 18px;font-size:13px;line-height:1.6}
+.detail .ind{margin:10px 0 8px}
+.detail .ind span{display:inline-block;background:var(--plumbg);color:var(--plum);padding:2px 9px;font-size:11px;margin:0 5px 4px 0;border-radius:2px}
+/* ---- modal ---- */
+.modal{display:none;position:fixed;inset:0;background:rgba(35,31,26,.55);z-index:50;align-items:center;justify-content:center;padding:24px}
+.modal.open{display:flex}
+.mbox{background:var(--card);border:1px solid var(--ink);max-width:780px;width:100%;max-height:85vh;display:flex;flex-direction:column}
+.mhead{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:2px solid var(--ink)}
+.mhead h3{font-family:var(--serif);font-size:16px}
+.mbody{padding:18px 20px;overflow-y:auto;font-size:13px;line-height:1.55}
+.mbody pre{white-space:pre-wrap;font-family:var(--sans)}
+.mfoot{padding:12px 20px;border-top:1px solid var(--hair);display:flex;gap:8px;justify-content:flex-end}
+/* ---- feed ---- */
+.feed{padding:16px 0;border-bottom:1px solid var(--hair)}
+.feed .fdate{font-size:10px;color:var(--plum);font-weight:700;text-transform:uppercase;letter-spacing:1.6px}
+.feed h4{font-family:var(--serif);font-size:16px;margin:5px 0 4px;line-height:1.35}
+.feed p{font-size:13px;color:#4e463c;line-height:1.55}
+.ftag{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:1px;padding:2px 9px;margin-top:8px;border-radius:2px}
+.ftag.high{background:var(--redbg);color:var(--red)}
+.ftag.med{background:var(--amberbg);color:var(--amber)}
+.ftag.info{background:var(--bluebg);color:var(--blue)}
+/* ---- cases ---- */
+.case{border-top:3px solid var(--ink);background:var(--card);border-left:1px solid var(--hair);border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:16px 18px;margin-bottom:14px}
+.case h3{font-family:var(--serif);font-size:17px;font-weight:700}
+.case .meta{font-size:11.5px;color:var(--muted);margin-top:3px}
+.case p{font-size:13px;line-height:1.55;margin-top:9px;color:#443d33}
+.case .why{border-left:3px solid var(--plum);padding:6px 12px;background:var(--plumbg);margin-top:9px;font-size:12.5px;line-height:1.5}
+.case .foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.case .nx{font-size:11.5px;color:var(--amber);font-weight:700}
+.empty{padding:30px;text-align:center;color:var(--muted);font-style:italic;font-family:var(--serif)}
+@media(max-width:820px){
+  .shell{flex-direction:column}
+  .side{width:100%;height:auto;position:static;flex-direction:row;align-items:center;flex-wrap:wrap;padding:14px 16px}
+  .nav{flex-direction:row;flex-wrap:wrap}
+  .nav button{border-left:none;border-bottom:2px solid transparent;border-radius:0}
+  .nav button.active{border-left:none;border-bottom-color:var(--plum)}
+  .tagline,.side .foot,.nav .n-sub{display:none}
+  .main{padding:18px 14px}
+  .tl:before{left:80px}
+  .tl-date{width:68px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="side">
+  <div>
+    <div class="mono" id="brandLogo" style="font-size:19px;line-height:1.2">Yunique&nbsp;AI</div>
+    <div class="brand">Governance<br>Radar</div>
+    <div class="tagline">AI · Privacy · Child Safety · Cyber<br>Law &amp; Litigation Intelligence</div>
+  </div>
+  <nav class="nav">
+    <button class="active" data-tab="db">Database <span class="n-sub">Laws, bills &amp; frameworks</span></button>
+    <button data-tab="feeds">The Week <span class="n-sub">Monday intelligence feed</span></button>
+    <button data-tab="cases">Docket Watch <span class="n-sub">AI litigation</span></button>
+    <button data-tab="clear">CLEAR™ <span class="n-sub">The framework</span></button>
+    <button data-tab="review">Review Queue <span id="revBadge"></span><span class="n-sub">Human in the loop</span></button>
+    <button data-tab="analytics">Analytics <span class="n-sub">Charts &amp; trends</span></button>
+    <button data-tab="about">Method <span class="n-sub">Coverage &amp; caveats</span></button>
+  </nav>
+  <div class="foot">Curated by Yunique AI.<br>Privacy, security and law.<br>Refreshed each Monday, 8am.<br>For information, not legal advice.</div>
+</aside>
+
+<main class="main">
+<div class="mast">
+  <div class="kick">Unified Legal Intelligence · US · EU &amp; UK · Africa · Global</div>
+  <h1>YAI Governance Radar</h1>
+  <div class="date">Database of record: July 22, 2026 · <span id="catCount"></span> categories · 5 domains · <span id="jurCount"></span> jurisdictions</div>
+  <div class="statline">
+    <div class="stat"><b id="stTotal">–</b><span>Instruments</span></div>
+    <div class="stat"><b id="stForce">–</b><span>Enacted / In force</span></div>
+    <div class="stat"><b id="stPend">–</b><span>Pending</span></div>
+    <div class="stat"><b id="stPra">–</b><span>Private right of action</span></div>
+    <div class="stat"><b id="stCases">–</b><span>Cases watched</span></div>
+  </div>
+</div>
+<div class="disclaimer">A working tool, not counsel. Verify against primary sources and dockets before you advise anyone — defensibility starts at the source.</div>
+
+<div id="tab-db">
+  <div class="panel">
+    <div class="ph">
+      <h2>Effective-date timeline <span class="sub" id="radarCount"></span></h2>
+      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+        <div class="winbtns">
+          <button data-win="90">90d</button><button data-win="180" class="on">180d</button><button data-win="365">365d</button>
+        </div>
+        <div class="actions">
+          <select id="briefPreset" class="btn">
+            <option value="">Brief: Current view</option>
+            <option value="Healthcare">Brief: Healthcare AI</option>
+            <option value="Financial services|Public companies">Brief: Financial services</option>
+            <option value="Employment">Brief: Employment / HR</option>
+            <option value="Social media|App stores">Brief: Social media &amp; minors</option>
+            <option value="Frontier AI developers">Brief: Frontier AI</option>
+            <option value="Consumer tech">Brief: Consumer tech</option>
+            <option value="Data brokers|Adtech">Brief: Data brokers &amp; adtech</option>
+          </select>
+          <button class="btn primary" id="briefBtn">Generate Brief</button>
+          <button class="btn" id="exportBtn">Export JSON</button>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:11.5px;color:var(--muted);border-bottom:1px solid var(--hair);padding-bottom:8px;margin-bottom:10px">
+      Days until each law becomes binding · 90d/180d/365d sets the look-ahead · <span style="color:#a33434">●</span> ≤30d <span style="color:#c2701e">●</span> ≤90d <span style="color:#31567f">●</span> ≤180d <span style="color:#3f6b3a">●</span> beyond · click an entry for its full record
+    </div>
+    <div class="tl" id="radar"></div>
+  </div>
+
+  <div class="pills" id="domainPills">
+    <button class="pill active" data-d="all">All</button>
+    <button class="pill" data-d="ai">AI &amp; Automated Decision-Making</button>
+    <button class="pill" data-d="privacy">Privacy &amp; Data Protection</button>
+    <button class="pill" data-d="kids">Children's Online Safety</button>
+    <button class="pill" data-d="cyber">Cybersecurity &amp; Breach</button>
+    <button class="pill" data-d="cross">Cross-Cutting</button>
+  </div>
+
+  <div class="clrow" id="clearPills">
+    <span class="cl-lab">CLEAR™</span>
+    <button class="cpill" data-p="C" title="Clarity — transparency, disclosure, labeling">C · Clarity</button>
+    <button class="cpill" data-p="L" title="Legal &amp; Risk Alignment — liability, penalties, enforcement">L · Legal &amp; Risk</button>
+    <button class="cpill" data-p="E" title="Enablement — literacy, skills, sandboxes, strategy">E · Enablement</button>
+    <button class="cpill" data-p="A" title="Accountability — audits, assessments, oversight, reporting">A · Accountability</button>
+    <button class="cpill" data-p="R" title="Responsible Execution — use restrictions, safety guardrails, protections">R · Responsible Execution</button>
+  </div>
+  <div class="pilbanner" id="pillarInfo" style="display:none"></div>
+
+  <div class="searchrow">
+    <input id="search" type="search" placeholder="Search name, jurisdiction, category, industry, keyword…">
+    <button class="btn" id="filterToggle">Filters</button>
+  </div>
+  <div class="filters" id="filters">
+    <select id="fRegion"><option value="all">Region: All</option><option value="us-federal">US Federal</option><option value="us-state">US State</option><option value="eu-uk">EU &amp; UK</option><option value="africa">Africa</option><option value="global">Global</option></select>
+    <select id="fStage"><option value="all">Stage: All</option></select>
+    <select id="fCat"><option value="all">Category: All</option></select>
+    <select id="fInd"><option value="all">Industry: All</option></select>
+    <label><input type="checkbox" id="fPra"> Has PRA only</label>
+    <button class="btn" id="clearF">Clear</button>
+  </div>
+
+  <div class="count" id="count"></div>
+  <table>
+    <thead><tr>
+      <th data-k="n">Law / Bill</th><th data-k="j">Jurisdiction</th><th data-k="c">Category</th><th data-k="s">Stage</th><th data-k="intro">Introduced</th><th data-k="eff">Effective</th><th data-k="pra">PRA</th>
+    </tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<div id="tab-feeds" style="display:none">
+  <div class="panel" style="border-left:3px solid var(--plum)">
+    <p style="font-size:12.5px;color:#4e463c;line-height:1.6">Refreshed by the <b>Monday-morning digest</b>: each run scans regulatory and docket developments across all five regions and posts triaged entries here. Say <i>"run my regulatory digest"</i> anytime for an off-cycle sweep.</p>
+  </div>
+  <div id="feedList"></div>
+</div>
+
+<div id="tab-cases" style="display:none">
+  <div class="panel" style="border-left:3px solid var(--plum)">
+    <p style="font-size:12.5px;color:#4e463c;line-height:1.6"><b>Docket watch:</b> the court decisions shaping AI law — training-data fair use, chatbot product liability, First Amendment challenges to tracked state laws, and AI federalism. Updated by the Monday digest. Verify against CourtListener/PACER before citing.</p>
+  </div>
+  <div class="pills" id="casePills"></div>
+  <div class="count" id="caseCount"></div>
+  <div id="caseList"></div>
+</div>
+
+<div id="tab-clear" style="display:none">
+  <div class="panel">
+    <div class="ph"><h2>The CLEAR™ Framework</h2></div>
+    <p style="font-size:13.5px;line-height:1.7">Organisations roll out AI with confidence and zero accountability. CLEAR™ is Yunique AI's framework for closing that gap — governing AI with legally defensible decisions. Every law, bill and case in this radar is mapped to the pillar(s) of work it creates for an organisation. Not what the law says. What it demands of you. Click any pillar's "Filter the database" button to see its instruments; the small plum tags on entries throughout the radar link back to this page.</p>
+  </div>
+  <div id="clearSecs"></div>
+</div>
+
+<div id="tab-review" style="display:none">
+  <div class="panel" style="border-left:3px solid var(--amber)">
+    <p style="font-size:12.5px;color:#4e463c;line-height:1.6"><b>Human in the loop.</b> Nothing in this radar should be relied upon professionally until a human has checked it against the primary source. This queue lists every entry carrying known uncertainty — plus changes the Monday digest makes, which land here as <i>pending approval</i> until you've reviewed them. Tick an item to mark it reviewed on this device; tell Claude to correct the database itself.</p>
+  </div>
+  <div class="count" id="revCount"></div>
+  <div id="reviewList"></div>
+</div>
+
+<div id="tab-analytics" style="display:none">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div class="panel" style="grid-column:1/-1"><div class="ph"><h2>Compliance dates by quarter, 2024–2028</h2></div><div style="height:240px"><canvas id="chTimeline"></canvas></div></div>
+    <div class="panel"><div class="ph"><h2>By domain</h2></div><div style="height:260px"><canvas id="chDomain"></canvas></div></div>
+    <div class="panel"><div class="ph"><h2>By region</h2></div><div style="height:260px"><canvas id="chRegion"></canvas></div></div>
+    <div class="panel" style="grid-column:1/-1"><div class="ph"><h2>By stage</h2></div><div style="height:260px"><canvas id="chStage"></canvas></div></div>
+  </div>
+</div>
+
+<div id="tab-about" style="display:none">
+  <div class="panel">
+    <div class="ph"><h2>Method &amp; coverage</h2></div>
+    <p style="line-height:1.7;font-size:13.5px">The YAI Governance Radar covers <span id="aboutCount"></span> laws, bills, regulations, and frameworks across five regions (US Federal, US State, EU &amp; UK, Africa, Global) and five domains (AI &amp; automated decision-making, privacy &amp; data protection, children's online safety, cybersecurity &amp; breach, cross-cutting), plus a curated docket watch of <span id="aboutCases"></span> AI cases. Compiled July 2026 from primary sources (congress.gov, state legislatures, EUR-Lex, legislation.gov.uk, national regulators, court dockets) and verified secondary reporting. Each instrument records enforcement authority, maximum penalty, and key obligations — compliance-reference level, not citation-grade. <b>PRA</b> = private right of action. Stages: <i>In effect</i>, <i>Enacted — phasing in</i>, <i>Passed into law</i>, <i>Passed chamber / In committee / Proposed</i>, <i>Enjoined</i>, <i>Failed / Withdrawn</i>. The timeline counts down to each instrument's next major compliance date. Every instrument and case is also mapped to the <b>CLEAR™ Framework</b> — <b>C</b>larity (transparency, disclosure, labeling), <b>L</b>egal &amp; Risk Alignment (liability, penalties, enforcement), <b>E</b>nablement (literacy, skills, sandboxes), <b>A</b>ccountability (audits, assessments, oversight), <b>R</b>esponsible Execution (use restrictions, safety guardrails) — so the database reads as the evidence base under a CLEAR™ assessment. Updated weekly by the Monday digest; ask Claude to add, correct, or re-verify any entry.</p>
+  </div>
+</div>
+</main>
+</div>
+
+<div class="modal" id="modal">
+  <div class="mbox">
+    <div class="mhead"><h3 id="mTitle"></h3><button class="btn" id="mClose">✕</button></div>
+    <div class="mbody"><pre id="mBody"></pre></div>
+    <div class="mfoot"><button class="btn" id="mCopy">Copy to clipboard</button><button class="btn primary" id="mDl">Download</button></div>
+  </div>
+</div>
+
+<script src="data/laws.js"></script>
+<script src="data/cases.js"></script>
+<script>
+const DATA = window.LAWS_DATA || [];
+const CASES = window.CASES_DATA || [];
+const REVIEW = [
+ {i:1,k:"Effective date",t:"Colorado HB 26-1139 (AI in Health Care)",issue:"Effective date not yet confirmed — shown as blank in the database.",how:"Check the enacted bill at leg.colorado.gov/bills/HB26-1139.",d:"2026-07-22"},
+ {i:2,k:"Bill status",t:"DEFIANCE Act — chamber status",issue:"Recorded as passed Senate / awaiting House; may have moved since compilation.",how:"Check congress.gov for the current status.",d:"2026-07-22"},
+ {i:3,k:"Bill status",t:"Great American AI Act (discussion draft)",issue:"Details drawn from early reporting on a discussion draft; sponsor text not yet reviewed.",how:"Locate the draft text and sponsors before citing.",d:"2026-07-22"},
+ {i:4,k:"Docket",t:"Concord Music v. Anthropic II (5:26-cv-00880) — stay status",issue:"Motion to stay noted; outcome unverified.",how:"Check the docket on CourtListener before relying on the Oct 21 SJ date.",d:"2026-07-22"},
+ {i:5,k:"Docket",t:"Character.AI cases — federal MDL consolidation",issue:"Consolidation pool noted but formal MDL grant unconfirmed.",how:"Check the JPML docket.",d:"2026-07-22"},
+ {i:6,k:"Docket",t:"Litigation docket numbers (Raine; Disney/Universal v. Midjourney; Dow Jones v. Perplexity)",issue:"Several docket numbers and next-dates are best-effort from secondary reporting.",how:"Cite-check on CourtListener/PACER before professional use.",d:"2026-07-22"},
+ {i:7,k:"Penalties",t:"Penalty figures — all entries",issue:"Maximum penalties are compliance-reference level, some inflation-adjusted figures approximate.",how:"Verify the current statutory figure before quoting in advice or content.",d:"2026-07-22"},
+ {i:8,k:"Implementation",t:"Egypt PDPL executive regulations",issue:"Enforcement described as awaiting executive regulations; status may have changed.",how:"Check MCIT/PDPC announcements.",d:"2026-07-22"},
+ {i:9,k:"Implementation",t:"African implementation timelines (Cameroon decrees, Ethiopia directives, Senegal reform)",issue:"Authority stand-up and implementing-rule dates are approximate.",how:"Verify with the national regulator before advising on these markets.",d:"2026-07-22"},
+ {i:10,k:"Coverage",t:"Multistate tracking buckets (2026 minor-safety wave; MI/OH/PA privacy bills; WA AI bills)",issue:"Grouped placeholder entries — individual bills not yet broken out.",how:"Ask Claude to expand any bucket into individual bill entries.",d:"2026-07-22"},
+ {i:11,k:"Effective date",t:"NY SAFE for Kids Act — compliance dates",issue:"Effective dates depend on AG rulemaking still in progress.",how:"Check ag.ny.gov rulemaking status.",d:"2026-07-22"},
+ {i:12,k:"Effective date",t:"Connecticut SB 5 — provision-by-provision phase-in",issue:"Database shows the first milestone (Oct 1, 2026); which duties land at each later date needs mapping.",how:"Review the session law at cga.ct.gov; ask Claude to build the phase table.",d:"2026-07-22"},
+ {i:13,k:"Implementation",t:"UK DUAA commencement — which UK GDPR amendments are in force",issue:"Phased commencement regulations were still landing at compilation.",how:"Check the latest commencement SI on legislation.gov.uk.",d:"2026-07-22"},
+ {i:14,k:"Judgment call",t:"CLEAR™ pillar tags — all entries",issue:"Tags are Claude's application of the CLEAR™ definitions; they carry your brand and deserve your eye.",how:"Spot-check per pillar; tell Claude any reassignments.",d:"2026-07-22"},
+ {i:15,k:"Voice",t:"Voice pass — UI copy and brief language",issue:"Drafted in Yunique's register from the yai-content profile; calibrated for posts, not UI.",how:"Read the CLEAR™ page, disclaimer and a generated brief; approve or redline.",d:"2026-07-22"},
+ {i:16,k:"Branding",t:"Sidebar logo — awaiting original file",issue:"Text wordmark in place; the true Yunique AI logo file has not yet reached Claude's workspace.",how:"Attach the logo file (transparent PNG or SVG) in chat, or connect the folder containing it; Claude will embed it as-is.",d:"2026-07-22"}
+];
+const FEEDS = [
+ {d:"2026-07-20",t:"Bartz v. Anthropic: $1.5B settlement wins final approval",p:"Judge Martinez-Olguin granted final approval July 20 — the largest US copyright settlement ever (~482,000 works, ~$3,113/book). Claims administration begins; the acquire-lawfully-or-pay baseline for training data is now locked in.",tag:"high"},
+ {d:"2026-07-20",t:"EU AI Act: Digital Omnibus becomes law — Annex III high-risk duties deferred to Dec 2, 2027",p:"Council gave final approval June 29; Parliament June 16. Annex III high-risk obligations move from Aug 2, 2026 to Dec 2, 2027; Annex I to Aug 2, 2028. Aug 2, 2026 governance and penalty provisions still land on schedule. Action: re-baseline client AI Act readiness roadmaps now.",tag:"high"},
+ {d:"2026-07-14",t:"UK Cyber Security & Resilience Bill in Lords committee",p:"Committee debate July 14. Expands NIS-style regulation to managed service providers and data centres, with tighter incident reporting. Expected to pass in stages during 2026.",tag:"med"},
+ {d:"2026-07-01",t:"Louisiana App Store Accountability Act now in effect",p:"Third state app-store age-verification law live (after Utah May 7; Texas remains enjoined). App stores must verify age and obtain parental consent for minors. Developers receive age-bracket signals.",tag:"high"},
+ {d:"2026-06-29",t:"US House passes KIDS Act package (KOSA + COPPA 2.0 + chatbot safety)",p:"Passed June 29 — duty of care, under-17 privacy protections, data-broker registration, and AI-chatbot safeguards for minors in one vehicle. Senate path uncertain; committee stall continues.",tag:"high"},
+ {d:"2026-06-03",t:"Colorado signs HB 26-1195: psychotherapy AI restrictions effective Aug 12, 2026",p:"Providers may use AI only for administrative/supplementary support and must review outputs. Part of Colorado's three-front AI-in-healthcare framework with SB 24-205 (now Jan 1, 2027) and HB 26-1139.",tag:"med"},
+ {d:"2026-05-27",t:"Connecticut enacts SB 5 — sweeping AI + online-safety omnibus",p:"Frontier-model duties, AI companions, automated employment decisions, and content provenance. Provisions phase in Oct 1, 2026 through Jan 1, 2028. First compliance deadline is ~10 weeks away.",tag:"high"},
+ {d:"2026-05-18",t:"Musk v. OpenAI: jury finds claims time-barred; appeal to Ninth Circuit",p:"Unanimous advisory verdict adopted by Judge Gonzalez Rogers — the merits of the charitable-trust claims were never reached. Appeal could run into 2027.",tag:"med"},
+ {d:"2026-05-19",t:"TAKE IT DOWN Act platform deadline passed",p:"Covered platforms must now operate a 48-hour NCII notice-and-removal process. FTC enforcement expected to focus on removal-process adequacy.",tag:"info"},
+ {d:"2026-05-05",t:"Pennsylvania sues Character.AI over chatbot posing as a psychiatrist",p:"First state-AG suit treating professional impersonation by a chatbot as consumer fraud — the enforcement analogue of the IL/UT/NV/CO therapy-AI statutes.",tag:"med"},
+ {d:"2026-04-29",t:"UK Crime and Policing Act 2026 receives Royal Assent",p:"Includes powers to extend the Online Safety Act to AI chatbots and creates AI-CSAM offences. Fast-track online-safety reform continues amid rising AI risks.",tag:"med"},
+ {d:"2026-04-22",t:"COPPA Rule full-compliance date reached",p:"2025 amendments now fully enforceable: separate consent for third-party disclosures, retention limits, expanded PI definition.",tag:"info"},
+ {d:"2026-03-27",t:"NY RAISE Act finalized via chapter amendment — effective Jan 1, 2027",p:"Final version places frontier-model oversight under a new DFS office with safety-protocol and incident-reporting duties.",tag:"med"},
+ {d:"2026-02-19",t:"Kenya AI Bill introduced in Senate",p:"Would establish an AI governance framework alongside the National AI Strategy 2025–2030. One to watch as Africa's AI hard-law wave begins (with Nigeria's E-Governance Bill).",tag:"info"},
+ {d:"2026-01-07",t:"Character.AI and Google settle five teen-harm suits",p:"Confidential terms, no admission of liability. The May 2025 ruling rejecting a broad First Amendment shield for chatbot outputs survives as persuasive authority.",tag:"med"}
+];
+const $=id=>document.getElementById(id);
+const fmt=d=>{if(!d)return"—";const x=new Date(d+"T00:00:00");return x.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})};
+const today=new Date();today.setHours(0,0,0,0);
+const daysTo=d=>Math.round((new Date(d+"T00:00:00")-today)/864e5);
+const stageColor={"In effect":"var(--green)","Enacted — phasing in":"var(--teal)","Passed into law":"#5e7d2e","Passed chamber":"var(--blue)","In committee":"var(--amber)","Proposed":"var(--amber)","Enjoined":"var(--red)","Failed":"var(--gray)","Withdrawn":"var(--gray)"};
+const domainName={ai:"AI & Automated Decision-Making",privacy:"Privacy & Data Protection",kids:"Children's Online Safety",cyber:"Cybersecurity & Breach",cross:"Cross-Cutting"};
+const PILLARS={C:"Clarity",L:"Legal & Risk Alignment",E:"Enablement",A:"Accountability",R:"Responsible Execution"};
+const PILLAR_DEF={
+ C:{q:"Can people tell what the AI is — and what it's doing?",d:"Laws demanding transparency: disclosure that you're talking to an AI, labeling of AI-generated content, documentation of training data, and notices about automated decisions.",w:"If a law carries this tag, it creates disclosure work: notices, labels, provenance tools, published documentation."},
+ L:{q:"What happens if you get it wrong?",d:"Laws creating legal exposure: penalties, enforcement powers, private rights of action, and liability rules — plus the court cases deciding how far that exposure reaches.",w:"If a law carries this tag, it belongs on your risk register: quantify the penalty exposure, know the enforcer, watch the case law."},
+ E:{q:"Are your people equipped to govern AI at all?",d:"Duties and programmes that build capability: AI-literacy obligations, skills strategies, regulatory sandboxes, and national AI plans.",w:"If a law carries this tag, it creates training and capability work — the pillar most organisations skip, and the smallest category in this database."},
+ A:{q:"Who answers for the AI — and can you prove it?",d:"Laws requiring you to show your work: audits, impact and risk assessments, oversight bodies, incident reporting, and record-keeping.",w:"If a law carries this tag, it creates evidence work: assessments to run, reports to file, documentation an auditor or regulator will ask for."},
+ R:{q:"Should this use of AI exist at all — and with what guardrails?",d:"Laws restricting what AI may do: prohibited practices, safety protocols, age gates, therapy bans, and protections for minors and vulnerable users.",w:"If a law carries this tag, it constrains deployment: some uses need guardrails, some need age assurance, some are simply banned."}
+};
+function gotoPillar(p){
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab==="clear"));
+  ["db","feeds","cases","clear","review","analytics","about"].forEach(n=>$("tab-"+n).style.display=n==="clear"?"":"none");
+  renderClearPage();
+  const sec=$("pil-"+p);
+  if(sec){if(sec.scrollIntoView)sec.scrollIntoView({behavior:"smooth",block:"start"});sec.classList.remove("flash");void sec.offsetWidth;sec.classList.add("flash")}
+}
+document.addEventListener("click",e=>{const t=e.target.closest(".cltag");if(t&&t.dataset.p){e.stopPropagation();gotoPillar(t.dataset.p)}});
+function filterByPillar(p){
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab==="db"));
+  ["db","feeds","cases","clear","review","analytics","about"].forEach(n=>$("tab-"+n).style.display=n==="db"?"":"none");
+  state={...state,q:"",domain:"all",region:"all",stage:"all",cat:"all",ind:"all",pra:false};
+  $("search").value="";$("fRegion").value="all";$("fStage").value="all";$("fCat").value="all";$("fInd").value="all";$("fPra").checked=false;
+  document.querySelectorAll("#domainPills .pill").forEach(x=>x.classList.toggle("active",x.dataset.d==="all"));
+  state.pillar=p;
+  document.querySelectorAll("#clearPills .cpill").forEach(x=>x.classList.toggle("active",x.dataset.p===p));
+  renderAll();window.scrollTo({top:0,behavior:"smooth"});
+}
+function otherFilters(){
+  const o=[];
+  if(state.q)o.push(`search "${state.q}"`);
+  if(state.domain!=="all")o.push("domain: "+domainName[state.domain]);
+  if(state.region!=="all")o.push("region: "+state.region);
+  if(state.stage!=="all")o.push("stage: "+state.stage);
+  if(state.cat!=="all")o.push("category: "+state.cat);
+  if(state.ind!=="all")o.push("industry: "+state.ind);
+  if(state.pra)o.push("PRA only");
+  return o;
+}
+function updatePillarBanner(){
+  const el=$("pillarInfo");
+  if(!state.pillar){el.style.display="none";return}
+  const p=state.pillar,def=PILLAR_DEF[p],n=filtered().length;
+  const total=DATA.filter(x=>(x.cl||[]).includes(p)).length;
+  const of=otherFilters();
+  el.style.display="";
+  el.innerHTML=`<b>CLEAR™ · ${p} — ${PILLARS[p]}.</b> <i>${def.q}</i> ${def.d} <b>Showing ${n} of ${total}.</b>`
+    +(n<total?` <a href="#" id="pilClear">Show all ${total} →</a>`:"")
+    +` <a href="#" id="pilMore">About this pillar →</a>`;
+  if(n<total)$("pilClear").onclick=e=>{e.preventDefault();
+    state={...state,q:"",domain:"all",region:"all",stage:"all",cat:"all",ind:"all",pra:false};
+    $("search").value="";$("fRegion").value="all";$("fStage").value="all";$("fCat").value="all";$("fInd").value="all";$("fPra").checked=false;
+    document.querySelectorAll("#domainPills .pill").forEach(x=>x.classList.toggle("active",x.dataset.d==="all"));
+    renderAll()};
+  $("pilMore").onclick=e=>{e.preventDefault();gotoPillar(p)};
+}
+function renderClearPage(){
+  $("clearSecs").innerHTML=Object.entries(PILLARS).map(([p,name])=>{
+    const laws=DATA.filter(x=>(x.cl||[]).includes(p));
+    const cs=CASES.filter(c=>(c.cl||[]).includes(p));
+    const ex=laws.filter(x=>["In effect","Enacted — phasing in","Passed into law"].includes(x.s)).sort((a,b)=>(b.eff||"")<(a.eff||"")?-1:1).slice(0,4);
+    return `<div class="pilsec" id="pil-${p}">
+      <h3>${p} · ${name}</h3>
+      <div class="q">${PILLAR_DEF[p].q}</div>
+      <p>${PILLAR_DEF[p].d}</p>
+      <p style="margin-top:8px"><b>What it means for you:</b> ${PILLAR_DEF[p].w}</p>
+      <p style="margin-top:8px"><b>${laws.length} laws</b> and <b>${cs.length} cases</b> in this radar carry the ${p} tag. Tags mark where a pillar is a <i>defining</i> demand of the instrument (one to three per law) — a prioritised lens, not a claim that no other law touches it. Four examples:</p>
+      <ul>${ex.map(x=>`<li><b>${x.n}</b> (${x.j}) — ${x.obl||x.sum.slice(0,90)+"…"}</li>`).join("")}</ul>
+      <p style="margin-top:6px;font-style:italic;color:var(--muted)">…and ${Math.max(0,laws.length-ex.length)} more — use the button below to see every one.</p>
+      <div style="margin-top:12px"><button class="btn primary pil-filter" data-p="${p}">Filter the database → ${laws.length} instruments</button></div>
+    </div>`;
+  }).join("");
+  document.querySelectorAll(".pil-filter").forEach(b=>b.onclick=()=>filterByPillar(b.dataset.p));
+}
+const store={get(){try{return localStorage.getItem("urit-state")}catch(e){return null}},set(v){try{localStorage.setItem("urit-state",v)}catch(e){}}};
+let state=JSON.parse(store.get()||"{}");
+state={domain:state.domain||"all",q:state.q||"",region:state.region||"all",stage:state.stage||"all",cat:state.cat||"all",ind:state.ind||"all",pra:state.pra||false,win:state.win||180,sort:state.sort||null,dir:state.dir||1,pillar:state.pillar||null};
+function save(){store.set(JSON.stringify(state))}
+
+$("stTotal").textContent=DATA.length;
+$("stForce").textContent=DATA.filter(x=>["In effect","Enacted — phasing in","Passed into law"].includes(x.s)).length;
+$("stPend").textContent=DATA.filter(x=>["Passed chamber","In committee","Proposed"].includes(x.s)).length;
+$("stPra").textContent=DATA.filter(x=>x.pra).length;
+$("stCases").textContent=CASES.length;
+$("catCount").textContent=[...new Set(DATA.map(x=>x.c))].length;
+$("jurCount").textContent=[...new Set(DATA.map(x=>x.j))].length;
+$("aboutCount").textContent=DATA.length;
+$("aboutCases").textContent=CASES.length;
+
+const opts=(id,vals)=>{const s=$(id);[...new Set(vals)].sort().forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;s.appendChild(o)})};
+opts("fStage",DATA.map(x=>x.s));
+opts("fCat",DATA.map(x=>x.c));
+opts("fInd",DATA.flatMap(x=>x.ind));
+
+function filtered(){
+  const q=state.q.toLowerCase();
+  return DATA.filter(x=>{
+    if(state.domain!=="all"&&x.d!==state.domain)return false;
+    if(state.region!=="all"&&x.r!==state.region)return false;
+    if(state.stage!=="all"&&x.s!==state.stage)return false;
+    if(state.cat!=="all"&&x.c!==state.cat)return false;
+    if(state.ind!=="all"&&!x.ind.includes(state.ind))return false;
+    if(state.pra&&!x.pra)return false;
+    if(state.pillar&&!(x.cl||[]).includes(state.pillar))return false;
+    if(q){const hay=[x.n,x.j,x.c,x.sum,x.obl||"",x.auth||"",domainName[x.d],...(x.ind||[])].join(" ").toLowerCase();
+      if(!q.split(/\s+/).filter(Boolean).every(t=>hay.includes(t)))return false}
+    return true;
+  });
+}
+function sorted(arr){
+  if(!state.sort)return arr;
+  const k=state.sort;
+  return [...arr].sort((a,b)=>{let va=a[k],vb=b[k];if(k==="pra"){va=a.pra?1:0;vb=b.pra?1:0}
+    if(va==null&&vb==null)return 0;if(va==null)return 1;if(vb==null)return -1;
+    return (va<vb?-1:va>vb?1:0)*state.dir});
+}
+function radarItems(){
+  return filtered().filter(x=>x.eff&&daysTo(x.eff)>=0&&daysTo(x.eff)<=state.win).sort((a,b)=>daysTo(a.eff)-daysTo(b.eff));
+}
+function renderRadar(){
+  const items=radarItems();
+  $("radarCount").textContent=items.length+" compliance dates in the next "+state.win+" days";
+  $("radar").innerHTML=items.length?items.map(x=>{
+    const d=daysTo(x.eff);const cls=d<=30?"u30":d<=90?"u90":d<=180?"u180":"u365";
+    return `<div class="tli ${cls}" data-id="${x.id}">
+      <div class="tl-date">${fmt(x.eff)}</div>
+      <div class="tl-dot"><i></i></div>
+      <div class="tl-body"><span class="tl-nm">${x.n}</span><span class="chip">in ${d}d</span><div class="tl-jr">${x.j}</div></div>
+    </div>`;
+  }).join(""):'<div class="empty">No effective dates in this window for current filters.</div>';
+  document.querySelectorAll(".tli").forEach(c=>c.onclick=()=>{const id=+c.dataset.id;$("search").value="";state.q="";renderTable();const row=document.querySelector(`tr[data-id="${id}"]`);if(row){row.scrollIntoView({behavior:"smooth",block:"center"});row.click()}});
+}
+function renderTable(){
+  const arr=sorted(filtered());
+  $("count").textContent="Showing "+arr.length+" of "+DATA.length+" laws & bills";
+  $("tbody").innerHTML=arr.map(x=>{
+    const fg=stageColor[x.s]||"var(--gray)";
+    return `<tr data-id="${x.id}">
+      <td><div class="lname">${x.n}</div><div class="lsum">${x.sum.length>110?x.sum.slice(0,110)+"…":x.sum}</div></td>
+      <td>${x.j}</td><td><span class="cat">${x.c}</span></td>
+      <td><span class="badge" style="color:${fg}"><i style="background:${fg}"></i>${x.s}</span></td>
+      <td style="white-space:nowrap">${fmt(x.intro)}</td><td style="white-space:nowrap">${fmt(x.eff)}</td>
+      <td class="${x.pra?"pra-y":"pra-n"}">${x.pra?"✓ Yes":"✕ No"}</td></tr>
+    <tr class="detail" id="det-${x.id}"><td colspan="7">
+      <b style="font-family:var(--serif);font-size:14.5px">${x.n}</b> — ${domainName[x.d]}<br><br>${x.sum}
+      ${x.auth?`<br><br><b>Enforcement:</b> ${x.auth}<br><b>Max penalty:</b> ${x.pen||"—"}`:""}
+      ${x.obl?`<br><b>Key obligations:</b> ${x.obl}`:""}
+      ${(x.cl&&x.cl.length)?`<div style="margin-top:10px">${x.cl.map(p=>`<span class="cltag" data-p="${p}" title="Click to learn what this pillar means">CLEAR™ · ${p} — ${PILLARS[p]}</span>`).join("")}<span style="font-size:10.5px;color:var(--muted);font-style:italic"> · click a tag to learn the pillar</span></div>`:""}
+      <div class="ind">${(x.ind||[]).map(i=>`<span>${i}</span>`).join("")}</div>
+      <a href="${x.src}" target="_blank" rel="noopener">Primary source ↗</a>
+    </td></tr>`;
+  }).join("")||`<tr><td colspan="7" class="empty">No matches${state.q?` for “${state.q}”`:""}. <a href="#" id="emptyClear">Clear search &amp; filters →</a></td></tr>`;
+  document.querySelectorAll("tbody tr:not(.detail)").forEach(r=>r.onclick=()=>{const d=$("det-"+r.dataset.id);if(d)d.classList.toggle("open")});
+  const ec=$("emptyClear");if(ec)ec.onclick=e=>{e.preventDefault();$("clearF").onclick()};
+}
+const caseStatusColor={"Active":"var(--blue)","Settled":"var(--green)","Settling":"var(--teal)","Decided":"var(--gray)","Decided — on appeal":"var(--amber)","On appeal":"var(--amber)","Enjoined — appeal likely":"var(--red)","Enjoined — on appeal":"var(--red)","Partially enjoined":"var(--red)","Law in effect — merits pending":"var(--teal)","Monitoring":"var(--plum)"};
+let caseCo="all";
+function renderCases(){
+  const cos=["all",...new Set(CASES.map(c=>c.co))];
+  $("casePills").innerHTML=cos.map(c=>`<button class="pill ${caseCo===c?"active":""}" data-co="${c}">${c==="all"?"All companies":c}</button>`).join("");
+  document.querySelectorAll("#casePills .pill").forEach(p=>p.onclick=()=>{caseCo=p.dataset.co;renderCases()});
+  const arr=CASES.filter(c=>caseCo==="all"||c.co===caseCo);
+  $("caseCount").textContent="Showing "+arr.length+" of "+CASES.length+" cases";
+  $("caseList").innerHTML=arr.map(c=>{
+    const fg=caseStatusColor[c.st]||"var(--gray)";
+    return `<div class="case">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start">
+        <div><h3>${c.cap}</h3><div class="meta">${c.ct} · Filed ${fmt(c.fd)} · <span class="cat">${c.ar}</span> ${(c.cl||[]).map(p=>`<span class="cltag" data-p="${p}" title="CLEAR™ ${PILLARS[p]} — click to learn more">${p} · ${PILLARS[p]}</span>`).join("")}</div></div>
+        <span class="badge" style="color:${fg}"><i style="background:${fg}"></i>${c.st}</span>
+      </div>
+      <p>${c.sum}</p>
+      <div class="why"><b>Why it matters:</b> ${c.why}</div>
+      <div class="foot">
+        <span class="nx">⏭ ${c.nx}</span>
+        <a href="${c.src}" target="_blank" rel="noopener" style="font-size:12px">Docket / source ↗</a>
+      </div>
+    </div>`;
+  }).join("");
+}
+const revStore={get(){try{return JSON.parse(localStorage.getItem("urit-reviewed")||"[]")}catch(e){return[]}},set(v){try{localStorage.setItem("urit-reviewed",JSON.stringify(v))}catch(e){}}};
+function renderReview(){
+  const done=revStore.get();
+  const open=REVIEW.filter(r=>!done.includes(r.i)).length;
+  $("revBadge").textContent=open?` (${open})`:"";
+  $("revCount").textContent=open+" open · "+done.length+" reviewed on this device";
+  $("reviewList").innerHTML=REVIEW.map(r=>{
+    const ok=done.includes(r.i);
+    return `<div class="case" style="border-top-color:${ok?"var(--green)":"var(--amber)"};opacity:${ok?".55":"1"}">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start">
+        <div><h3 style="font-size:15px">${r.t}</h3><div class="meta"><span class="cat">${r.k}</span> · flagged ${fmt(r.d)}</div></div>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;white-space:nowrap"><input type="checkbox" data-rev="${r.i}" ${ok?"checked":""}> ${ok?"Reviewed":"Mark reviewed"}</label>
+      </div>
+      <p><b>What's uncertain:</b> ${r.issue}</p>
+      <p style="margin-top:5px"><b>How to verify:</b> ${r.how}</p>
+    </div>`;
+  }).join("");
+  document.querySelectorAll("[data-rev]").forEach(c=>c.onchange=()=>{
+    let d=revStore.get();const id=+c.dataset.rev;
+    d=c.checked?[...new Set([...d,id])]:d.filter(x=>x!==id);
+    revStore.set(d);renderReview();
+  });
+}
+function renderFeeds(){
+  $("feedList").innerHTML=FEEDS.map(f=>`<div class="feed"><div class="fdate">${fmt(f.d)}</div><h4>${f.t}</h4><p>${f.p}</p><span class="ftag ${f.tag}">${f.tag==="high"?"HIGH PRIORITY":f.tag==="med"?"MONITOR":"FYI"}</span></div>`).join("");
+}
+function renderAll(){renderRadar();renderTable();updatePillarBanner();save()}
+
+document.querySelectorAll(".nav button").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));t.classList.add("active");
+  ["db","feeds","cases","clear","review","analytics","about"].forEach(n=>$("tab-"+n).style.display=t.dataset.tab===n?"":"none");
+  if(t.dataset.tab==="analytics")setTimeout(renderAnalytics,50);
+  if(t.dataset.tab==="clear")renderClearPage();
+  if(t.dataset.tab==="review")renderReview();
+});
+let charts={};
+function mkChart(id,cfg){if(charts[id])charts[id].destroy();charts[id]=new Chart($(id),cfg)}
+function renderAnalytics(){
+  if(typeof Chart==="undefined")return;
+  Chart.defaults.font.family=getComputedStyle(document.body).fontFamily;
+  const qOf=d=>d.slice(0,4)+" Q"+(Math.floor((+d.slice(5,7)-1)/3)+1);
+  const qs=[];for(let y=2024;y<=2028;y++)for(let i=1;i<=4;i++)qs.push(y+" Q"+i);
+  mkChart("chTimeline",{type:"bar",data:{labels:qs,datasets:[{label:"Compliance dates",data:qs.map(k=>DATA.filter(x=>x.eff&&qOf(x.eff)===k).length),backgroundColor:qs.map(k=>k===qOf(new Date().toISOString().slice(0,10))?"#a33434":"#6d1f4e")}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{precision:0}}}}});
+  const doms=Object.keys(domainName);
+  mkChart("chDomain",{type:"doughnut",data:{labels:doms.map(d=>domainName[d]),datasets:[{data:doms.map(d=>DATA.filter(x=>x.d===d).length),backgroundColor:["#6d1f4e","#3f6b3a","#96660f","#a33434","#31567f"]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"right"}}}});
+  const regs={"us-federal":"US Federal","us-state":"US State","eu-uk":"EU & UK","africa":"Africa","global":"Global"};
+  mkChart("chRegion",{type:"bar",data:{labels:Object.values(regs),datasets:[{data:Object.keys(regs).map(r=>DATA.filter(x=>x.r===r).length),backgroundColor:["#6d1f4e","#b0407e","#31567f","#96660f","#2f6b62"],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{precision:0}}}}});
+  const stages=[...new Set(DATA.map(x=>x.s))].sort((a,b)=>DATA.filter(x=>x.s===b).length-DATA.filter(x=>x.s===a).length);
+  const stageHex={"In effect":"#3f6b3a","Enacted — phasing in":"#2f6b62","Passed into law":"#7a9c3a","Passed chamber":"#31567f","In committee":"#c2701e","Proposed":"#e0a13a","Enjoined":"#a33434","Failed":"#8a7f72","Withdrawn":"#b3a897"};
+  mkChart("chStage",{type:"bar",data:{labels:stages,datasets:[{data:stages.map(s=>DATA.filter(x=>x.s===s).length),backgroundColor:stages.map(s=>stageHex[s]||"#6d1f4e"),borderRadius:4}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{precision:0}}}}});
+}
+document.querySelectorAll("#domainPills .pill").forEach(p=>p.onclick=()=>{
+  document.querySelectorAll("#domainPills .pill").forEach(x=>x.classList.remove("active"));p.classList.add("active");
+  state.domain=p.dataset.d;renderAll();
+});
+document.querySelectorAll(".winbtns button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".winbtns button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+  state.win=+b.dataset.win;renderAll();
+});
+document.querySelectorAll("#clearPills .cpill").forEach(p=>p.onclick=()=>{
+  state.pillar=state.pillar===p.dataset.p?null:p.dataset.p;
+  document.querySelectorAll("#clearPills .cpill").forEach(x=>x.classList.toggle("active",x.dataset.p===state.pillar));
+  renderAll();
+});
+$("search").oninput=e=>{state.q=e.target.value;renderAll()};
+$("filterToggle").onclick=()=>$("filters").classList.toggle("open");
+$("fRegion").onchange=e=>{state.region=e.target.value;renderAll()};
+$("fStage").onchange=e=>{state.stage=e.target.value;renderAll()};
+$("fCat").onchange=e=>{state.cat=e.target.value;renderAll()};
+$("fInd").onchange=e=>{state.ind=e.target.value;renderAll()};
+$("fPra").onchange=e=>{state.pra=e.target.checked;renderAll()};
+$("clearF").onclick=()=>{state={...state,q:"",region:"all",stage:"all",cat:"all",ind:"all",pra:false,pillar:null};
+  $("search").value="";$("fRegion").value="all";$("fStage").value="all";$("fCat").value="all";$("fInd").value="all";$("fPra").checked=false;
+  document.querySelectorAll("#clearPills .cpill").forEach(x=>x.classList.remove("active"));renderAll()};
+document.querySelectorAll("thead th").forEach(th=>th.onclick=()=>{
+  const k=th.dataset.k;if(state.sort===k)state.dir*=-1;else{state.sort=k;state.dir=1}renderAll();
+});
+
+let modalText="",modalFile="";
+function openModal(title,text,file){$("mTitle").textContent=title;$("mBody").textContent=text;modalText=text;modalFile=file;$("modal").classList.add("open")}
+$("mClose").onclick=()=>$("modal").classList.remove("open");
+$("modal").onclick=e=>{if(e.target===$("modal"))$("modal").classList.remove("open")};
+$("mCopy").onclick=()=>{navigator.clipboard.writeText(modalText).then(()=>{$("mCopy").textContent="Copied ✓";setTimeout(()=>$("mCopy").textContent="Copy to clipboard",1500)})};
+$("mDl").onclick=()=>{const b=new Blob([modalText],{type:"text/plain"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=modalFile;a.click()};
+
+$("briefBtn").onclick=()=>{
+  const preset=$("briefPreset").value;
+  const f=preset?DATA.filter(x=>preset.split("|").some(i=>(x.ind||[]).includes(i))):filtered();
+  const presetLabel=preset?$("briefPreset").selectedOptions[0].textContent.replace("Brief: ",""):null;
+  const soon=f.filter(x=>x.eff&&daysTo(x.eff)>=0&&daysTo(x.eff)<=90).sort((a,b)=>daysTo(a.eff)-daysTo(b.eff));
+  const recent=f.filter(x=>x.eff&&daysTo(x.eff)<0&&daysTo(x.eff)>=-60).sort((a,b)=>daysTo(b.eff)-daysTo(a.eff));
+  const pending=f.filter(x=>["Passed chamber","In committee","Proposed"].includes(x.s));
+  const scope=presetLabel?presetLabel+" (industry preset)":(state.domain!=="all"?domainName[state.domain]:"All domains")+(state.region!=="all"?" · "+state.region:"")+(state.ind!=="all"?" · "+state.ind:"")+(state.pillar?" · CLEAR™ "+PILLARS[state.pillar]:"");
+  const PILLAR_BRIEF={C:"disclosure and transparency duties — telling people an AI is in use, labelling its output, documenting its training",L:"legal exposure — penalties, enforcement, lawsuits. This is where non-compliance costs money",E:"capability building — AI literacy, training, sandboxes. Obligations to equip your people",A:"proof obligations — audits, assessments, reports. What a regulator will ask you to produce",R:"limits on use — banned practices, safety guardrails, protections for minors and vulnerable users"};
+  let out=`YAI GOVERNANCE RADAR — CLEAR™ EXPOSURE BRIEF
+Generated: ${today.toDateString()}
+Scope: ${scope} — ${f.length} laws in view
+Sorted by the CLEAR™ Framework: what each law demands of an organisation, not just what it says.
+
+`;
+  for(const[p,pname]of Object.entries(PILLARS)){
+    const pf=f.filter(x=>(x.cl||[]).includes(p));
+    if(!pf.length)continue;
+    const psoon=pf.filter(x=>x.eff&&daysTo(x.eff)>=0&&daysTo(x.eff)<=90).sort((a,b)=>daysTo(a.eff)-daysTo(b.eff));
+    const precent=pf.filter(x=>x.eff&&daysTo(x.eff)<0&&daysTo(x.eff)>=-60).sort((a,b)=>daysTo(b.eff)-daysTo(a.eff));
+    out+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${p} · ${pname.toUpperCase()}  (${pf.length} laws in scope)
+In plain terms: ${PILLAR_BRIEF[p]}.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+`;
+    if(psoon.length){out+=`▶ ACT NOW — binding within 90 days:\n\n`+psoon.map(x=>`  • ${x.n} (${x.j})\n    Deadline: ${fmt(x.eff)} — ${daysTo(x.eff)} days from today\n    What it requires: ${x.obl||x.sum}${x.pen?`\n    If you miss it: ${x.pen}`:""}`).join("\n\n")+"\n\n"}
+    if(precent.length){out+=`▶ VERIFY COMPLIANCE — became binding in the last 60 days:\n\n`+precent.map(x=>`  • ${x.n} (${x.j}) — binding since ${fmt(x.eff)}\n    What it requires: ${x.obl||x.sum.slice(0,120)}`).join("\n\n")+"\n\n"}
+    if(!psoon.length&&!precent.length){out+=`No new deadlines in this window. ${pf.filter(x=>["In effect","Enacted — phasing in"].includes(x.s)).length} of these laws are already binding — standing obligations, not new work.\n\n`}
+  }
+  out+=`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ON THE HORIZON  (${pending.length} bills — not yet law)
+Nothing to action today; these show the direction of travel.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+`;
+  out+=pending.map(x=>`  • ${x.n} (${x.j}) — status: ${x.s}${(x.cl||[]).length?` — would create ${x.cl.map(c=>PILLARS[c]).join(" + ")} work`:""}`).join("\n")||"  None in current view.";
+  out+=`
+
+—
+Yunique AI — Govern AI with CLEAR™.
+Not sure where your AI governance gaps are? Start with the CLEAR™ Assessment: https://bit.ly/CLEARAssessment
+For information, not legal advice. Verify against primary sources.`;
+  openModal("Client Brief — "+scope,out,"yai-radar-brief-"+new Date().toISOString().slice(0,10)+".txt");
+};
+$("exportBtn").onclick=()=>{
+  const arr=filtered().map(x=>({name:x.n,jurisdiction:x.j,region:x.r,category:x.c,domain:domainName[x.d],stage:x.s,introduced:x.intro,effective:x.eff,private_right_of_action:x.pra,industries:x.ind,enforcement:x.auth||null,max_penalty:x.pen||null,key_obligations:x.obl||null,summary:x.sum,source:x.src}));
+  openModal("Export — "+arr.length+" records (JSON)",JSON.stringify(arr,null,2),"yai-governance-radar-export.json");
+};
+
+if(state.domain!=="all"){const p=document.querySelector(`#domainPills .pill[data-d="${state.domain}"]`);if(p){document.querySelectorAll("#domainPills .pill").forEach(x=>x.classList.remove("active"));p.classList.add("active")}}
+if(state.pillar){document.querySelectorAll("#clearPills .cpill").forEach(x=>x.classList.toggle("active",x.dataset.p===state.pillar))}
+if(state.win!==180){document.querySelectorAll(".winbtns button").forEach(x=>x.classList.toggle("on",+x.dataset.win===state.win))}
+$("search").value=state.q;$("fRegion").value=state.region;$("fStage").value=state.stage;$("fCat").value=state.cat;$("fInd").value=state.ind;$("fPra").checked=state.pra;
+if(state.q||state.region!=="all"||state.stage!=="all"||state.cat!=="all"||state.ind!=="all"||state.pra)$("filters").classList.add("open");
+
+renderFeeds();renderCases();renderReview();renderAll();
+</script>
+</body>
+</html>
