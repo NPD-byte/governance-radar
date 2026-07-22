@@ -94,6 +94,8 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
 .badge i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:0}
 .cat{display:inline-block;font-size:10.5px;border-bottom:1px solid var(--hair);padding:2px 0;color:var(--gray);white-space:nowrap;letter-spacing:.3px}
 .pra-y{color:var(--green);font-weight:700}.pra-n{color:#b3a897}
+.jlink{cursor:pointer;border-bottom:1px dotted var(--plum);color:var(--plum)}
+.jlink:hover{background:var(--plumbg)}
 .clrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
 .clrow .cl-lab{font-family:var(--serif);font-size:12.5px;font-weight:700;color:var(--plum);margin-right:2px}
 .cpill{background:none;border:1px solid var(--plum);border-radius:2px;padding:5px 11px;font-size:11.5px;font-weight:700;cursor:pointer;color:var(--plum);font-family:var(--sans)}
@@ -159,7 +161,8 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
 <div class="shell">
 <aside class="side">
   <div>
-    <div class="mono" id="brandLogo" style="font-size:19px;line-height:1.2">Yunique&nbsp;AI</div>
+    <img src="logo.png" alt="Yunique AI" style="max-width:170px;height:auto;display:block" onerror="this.style.display='none';document.getElementById('brandLogo').style.display='block'">
+    <div class="mono" id="brandLogo" style="font-size:19px;line-height:1.2;display:none">Yunique&nbsp;AI</div>
     <div class="brand">Governance<br>Radar</div>
     <div class="tagline">AI · Privacy · Child Safety · Cyber<br>Law &amp; Litigation Intelligence</div>
   </div>
@@ -210,6 +213,7 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
             <option value="Data brokers|Adtech">Brief: Data brokers &amp; adtech</option>
           </select>
           <button class="btn primary" id="briefBtn">Generate Brief</button>
+          <button class="btn" id="profileBtn">Country Profile</button>
           <button class="btn" id="exportBtn">Export JSON</button>
         </div>
       </div>
@@ -245,6 +249,7 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
   </div>
   <div class="filters" id="filters">
     <select id="fRegion"><option value="all">Region: All</option><option value="us-federal">US Federal</option><option value="us-state">US State</option><option value="eu-uk">EU &amp; UK</option><option value="africa">Africa</option><option value="global">Global</option></select>
+    <select id="fJur"><option value="all">Jurisdiction: All</option></select>
     <select id="fStage"><option value="all">Stage: All</option></select>
     <select id="fCat"><option value="all">Category: All</option></select>
     <select id="fInd"><option value="all">Industry: All</option></select>
@@ -372,6 +377,9 @@ const daysTo=d=>Math.round((new Date(d+"T00:00:00")-today)/864e5);
 const stageColor={"In effect":"var(--green)","Enacted — phasing in":"var(--teal)","Passed into law":"#5e7d2e","Passed chamber":"var(--blue)","In committee":"var(--amber)","Proposed":"var(--amber)","Enjoined":"var(--red)","Failed":"var(--gray)","Withdrawn":"var(--gray)"};
 const domainName={ai:"AI & Automated Decision-Making",privacy:"Privacy & Data Protection",kids:"Children's Online Safety",cyber:"Cybersecurity & Breach",cross:"Cross-Cutting"};
 const PILLARS={C:"Clarity",L:"Legal & Risk Alignment",E:"Enablement",A:"Accountability",R:"Responsible Execution"};
+const DB_DATE="2026-07-22"; // database of record; per-entry x.lv overrides when the digest re-verifies
+const lvOf=x=>x.lv||DB_DATE;
+const lvStale=x=>Math.round((today-new Date(lvOf(x)+"T00:00:00"))/864e5)>90;
 const PILLAR_DEF={
  C:{q:"Can people tell what the AI is — and what it's doing?",d:"Laws demanding transparency: disclosure that you're talking to an AI, labeling of AI-generated content, documentation of training data, and notices about automated decisions.",w:"If a law carries this tag, it creates disclosure work: notices, labels, provenance tools, published documentation."},
  L:{q:"What happens if you get it wrong?",d:"Laws creating legal exposure: penalties, enforcement powers, private rights of action, and liability rules — plus the court cases deciding how far that exposure reaches.",w:"If a law carries this tag, it belongs on your risk register: quantify the penalty exposure, know the enforcer, watch the case law."},
@@ -402,6 +410,7 @@ function otherFilters(){
   if(state.q)o.push(`search "${state.q}"`);
   if(state.domain!=="all")o.push("domain: "+domainName[state.domain]);
   if(state.region!=="all")o.push("region: "+state.region);
+  if(state.jur!=="all")o.push("jurisdiction: "+state.jur);
   if(state.stage!=="all")o.push("stage: "+state.stage);
   if(state.cat!=="all")o.push("category: "+state.cat);
   if(state.ind!=="all")o.push("industry: "+state.ind);
@@ -445,7 +454,7 @@ function renderClearPage(){
 }
 const store={get(){try{return localStorage.getItem("urit-state")}catch(e){return null}},set(v){try{localStorage.setItem("urit-state",v)}catch(e){}}};
 let state=JSON.parse(store.get()||"{}");
-state={domain:state.domain||"all",q:state.q||"",region:state.region||"all",stage:state.stage||"all",cat:state.cat||"all",ind:state.ind||"all",pra:state.pra||false,win:state.win||180,sort:state.sort||null,dir:state.dir||1,pillar:state.pillar||null};
+state={domain:state.domain||"all",q:state.q||"",region:state.region||"all",jur:state.jur||"all",stage:state.stage||"all",cat:state.cat||"all",ind:state.ind||"all",pra:state.pra||false,win:state.win||180,sort:state.sort||null,dir:state.dir||1,pillar:state.pillar||null};
 function save(){store.set(JSON.stringify(state))}
 
 $("stTotal").textContent=DATA.length;
@@ -459,6 +468,7 @@ $("aboutCount").textContent=DATA.length;
 $("aboutCases").textContent=CASES.length;
 
 const opts=(id,vals)=>{const s=$(id);[...new Set(vals)].sort().forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;s.appendChild(o)})};
+opts("fJur",DATA.map(x=>x.j));
 opts("fStage",DATA.map(x=>x.s));
 opts("fCat",DATA.map(x=>x.c));
 opts("fInd",DATA.flatMap(x=>x.ind));
@@ -468,6 +478,7 @@ function filtered(){
   return DATA.filter(x=>{
     if(state.domain!=="all"&&x.d!==state.domain)return false;
     if(state.region!=="all"&&x.r!==state.region)return false;
+    if(state.jur!=="all"&&x.j!==state.jur)return false;
     if(state.stage!=="all"&&x.s!==state.stage)return false;
     if(state.cat!=="all"&&x.c!==state.cat)return false;
     if(state.ind!=="all"&&!x.ind.includes(state.ind))return false;
@@ -508,7 +519,7 @@ function renderTable(){
     const fg=stageColor[x.s]||"var(--gray)";
     return `<tr data-id="${x.id}">
       <td><div class="lname">${x.n}</div><div class="lsum">${x.sum.length>110?x.sum.slice(0,110)+"…":x.sum}</div></td>
-      <td>${x.j}</td><td><span class="cat">${x.c}</span></td>
+      <td><span class="jlink" data-jur="${x.j.replace(/"/g,'&quot;')}" title="Show everything in ${x.j}">${x.j}</span></td><td><span class="cat">${x.c}</span></td>
       <td><span class="badge" style="color:${fg}"><i style="background:${fg}"></i>${x.s}</span></td>
       <td style="white-space:nowrap">${fmt(x.intro)}</td><td style="white-space:nowrap">${fmt(x.eff)}</td>
       <td class="${x.pra?"pra-y":"pra-n"}">${x.pra?"✓ Yes":"✕ No"}</td></tr>
@@ -517,11 +528,13 @@ function renderTable(){
       ${x.auth?`<br><br><b>Enforcement:</b> ${x.auth}<br><b>Max penalty:</b> ${x.pen||"—"}`:""}
       ${x.obl?`<br><b>Key obligations:</b> ${x.obl}`:""}
       ${(x.cl&&x.cl.length)?`<div style="margin-top:10px">${x.cl.map(p=>`<span class="cltag" data-p="${p}" title="Click to learn what this pillar means">CLEAR™ · ${p} — ${PILLARS[p]}</span>`).join("")}<span style="font-size:10.5px;color:var(--muted);font-style:italic"> · click a tag to learn the pillar</span></div>`:""}
+      <div style="margin-top:8px;font-size:11px;color:${lvStale(x)?"var(--amber)":"var(--muted)"}">${lvStale(x)?"⚠ ":"✓ "}Last verified ${fmt(lvOf(x))}${lvStale(x)?" — due a re-check (>90 days)":""}</div>
       <div class="ind">${(x.ind||[]).map(i=>`<span>${i}</span>`).join("")}</div>
       <a href="${x.src}" target="_blank" rel="noopener">Primary source ↗</a>
     </td></tr>`;
   }).join("")||`<tr><td colspan="7" class="empty">No matches${state.q?` for “${state.q}”`:""}. <a href="#" id="emptyClear">Clear search &amp; filters →</a></td></tr>`;
   document.querySelectorAll("tbody tr:not(.detail)").forEach(r=>r.onclick=()=>{const d=$("det-"+r.dataset.id);if(d)d.classList.toggle("open")});
+  document.querySelectorAll(".jlink").forEach(j=>j.onclick=e=>{e.stopPropagation();state.jur=j.dataset.jur;$("fJur").value=state.jur;$("filters").classList.add("open");renderAll();window.scrollTo({top:0,behavior:"smooth"})});
   const ec=$("emptyClear");if(ec)ec.onclick=e=>{e.preventDefault();$("clearF").onclick()};
 }
 const caseStatusColor={"Active":"var(--blue)","Settled":"var(--green)","Settling":"var(--teal)","Decided":"var(--gray)","Decided — on appeal":"var(--amber)","On appeal":"var(--amber)","Enjoined — appeal likely":"var(--red)","Enjoined — on appeal":"var(--red)","Partially enjoined":"var(--red)","Law in effect — merits pending":"var(--teal)","Monitoring":"var(--plum)"};
@@ -615,12 +628,13 @@ document.querySelectorAll("#clearPills .cpill").forEach(p=>p.onclick=()=>{
 $("search").oninput=e=>{state.q=e.target.value;renderAll()};
 $("filterToggle").onclick=()=>$("filters").classList.toggle("open");
 $("fRegion").onchange=e=>{state.region=e.target.value;renderAll()};
+$("fJur").onchange=e=>{state.jur=e.target.value;renderAll()};
 $("fStage").onchange=e=>{state.stage=e.target.value;renderAll()};
 $("fCat").onchange=e=>{state.cat=e.target.value;renderAll()};
 $("fInd").onchange=e=>{state.ind=e.target.value;renderAll()};
 $("fPra").onchange=e=>{state.pra=e.target.checked;renderAll()};
-$("clearF").onclick=()=>{state={...state,q:"",region:"all",stage:"all",cat:"all",ind:"all",pra:false,pillar:null};
-  $("search").value="";$("fRegion").value="all";$("fStage").value="all";$("fCat").value="all";$("fInd").value="all";$("fPra").checked=false;
+$("clearF").onclick=()=>{state={...state,q:"",region:"all",jur:"all",stage:"all",cat:"all",ind:"all",pra:false,pillar:null};
+  $("search").value="";$("fRegion").value="all";$("fJur").value="all";$("fStage").value="all";$("fCat").value="all";$("fInd").value="all";$("fPra").checked=false;
   document.querySelectorAll("#clearPills .cpill").forEach(x=>x.classList.remove("active"));renderAll()};
 document.querySelectorAll("thead th").forEach(th=>th.onclick=()=>{
   const k=th.dataset.k;if(state.sort===k)state.dir*=-1;else{state.sort=k;state.dir=1}renderAll();
@@ -678,6 +692,24 @@ Not sure where your AI governance gaps are? Start with the CLEAR™ Assessment: 
 For information, not legal advice. Verify against primary sources.`;
   openModal("Client Brief — "+scope,out,"yai-radar-brief-"+new Date().toISOString().slice(0,10)+".txt");
 };
+$("profileBtn").onclick=()=>{
+  const jur=state.jur!=="all"?state.jur:null;
+  const laws=DATA.filter(x=>jur?x.j===jur:true);
+  const cs=CASES.filter(c=>jur?(c.ct||"").includes(jur)||c.cap.includes(jur):false);
+  const title=jur||"All jurisdictions";
+  const inforce=laws.filter(x=>["In effect","Enacted — phasing in"].includes(x.s));
+  const pending=laws.filter(x=>["Passed into law","Passed chamber","In committee","Proposed"].includes(x.s));
+  const soon=laws.filter(x=>x.eff&&daysTo(x.eff)>=0&&daysTo(x.eff)<=180).sort((a,b)=>daysTo(a.eff)-daysTo(b.eff));
+  let out=`YAI GOVERNANCE RADAR — JURISDICTION PROFILE\n${title}\nGenerated: ${today.toDateString()}\n\n`;
+  if(!jur)out+="(Tip: filter to one jurisdiction — click a country in the table — for a single-country profile.)\n\n";
+  out+=`Instruments tracked: ${laws.length}  ·  In force / phasing in: ${inforce.length}  ·  Pending: ${pending.length}\n\n`;
+  out+=`━━ IN FORCE / PHASING IN ━━\n\n`+(inforce.map(x=>`• ${x.n}  [${x.s}${x.eff?", eff. "+fmt(x.eff):""}]\n  ${x.obl||x.sum}\n  Enforcement: ${x.auth||"—"} · Penalty: ${x.pen||"—"} · CLEAR™: ${(x.cl||[]).join("/")||"—"}`).join("\n\n")||"None.")+"\n\n";
+  out+=`━━ UPCOMING DEADLINES (next 180 days) ━━\n\n`+(soon.map(x=>`• [in ${daysTo(x.eff)}d — ${fmt(x.eff)}] ${x.n}`).join("\n")||"None in window.")+"\n\n";
+  out+=`━━ PENDING / PROPOSED ━━\n\n`+(pending.map(x=>`• ${x.n}  [${x.s}]`).join("\n")||"None.")+"\n\n";
+  if(cs.length)out+=`━━ RELATED LITIGATION ━━\n\n`+cs.map(c=>`• ${c.cap}  [${c.st}] — ${c.nx}`).join("\n")+"\n\n";
+  out+=`—\nYunique AI — Govern AI with CLEAR™. For information, not legal advice. Verify against primary sources.`;
+  openModal("Jurisdiction profile — "+title,out,"yai-radar-"+(jur||"all").toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-profile.txt");
+};
 $("exportBtn").onclick=()=>{
   const arr=filtered().map(x=>({name:x.n,jurisdiction:x.j,region:x.r,category:x.c,domain:domainName[x.d],stage:x.s,introduced:x.intro,effective:x.eff,private_right_of_action:x.pra,industries:x.ind,enforcement:x.auth||null,max_penalty:x.pen||null,key_obligations:x.obl||null,summary:x.sum,source:x.src}));
   openModal("Export — "+arr.length+" records (JSON)",JSON.stringify(arr,null,2),"yai-governance-radar-export.json");
@@ -686,8 +718,8 @@ $("exportBtn").onclick=()=>{
 if(state.domain!=="all"){const p=document.querySelector(`#domainPills .pill[data-d="${state.domain}"]`);if(p){document.querySelectorAll("#domainPills .pill").forEach(x=>x.classList.remove("active"));p.classList.add("active")}}
 if(state.pillar){document.querySelectorAll("#clearPills .cpill").forEach(x=>x.classList.toggle("active",x.dataset.p===state.pillar))}
 if(state.win!==180){document.querySelectorAll(".winbtns button").forEach(x=>x.classList.toggle("on",+x.dataset.win===state.win))}
-$("search").value=state.q;$("fRegion").value=state.region;$("fStage").value=state.stage;$("fCat").value=state.cat;$("fInd").value=state.ind;$("fPra").checked=state.pra;
-if(state.q||state.region!=="all"||state.stage!=="all"||state.cat!=="all"||state.ind!=="all"||state.pra)$("filters").classList.add("open");
+$("search").value=state.q;$("fRegion").value=state.region;$("fJur").value=state.jur;$("fStage").value=state.stage;$("fCat").value=state.cat;$("fInd").value=state.ind;$("fPra").checked=state.pra;
+if(state.q||state.region!=="all"||state.jur!=="all"||state.stage!=="all"||state.cat!=="all"||state.ind!=="all"||state.pra)$("filters").classList.add("open");
 
 renderFeeds();renderCases();renderReview();renderAll();
 </script>
