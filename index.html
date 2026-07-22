@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YAI Governance Radar</title>
+<title>Governance Radar — Yunique AI</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <style>
 :root { color-scheme: light;
@@ -33,6 +33,11 @@ a{color:var(--plum)}
 /* ---- main ---- */
 .main{flex:1;min-width:0;padding:30px 34px 60px}
 .mast{border-bottom:3px double var(--hair);padding-bottom:18px;margin-bottom:18px}
+.mast-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+.mast-logo{flex-shrink:0;text-align:right}
+.mast-logo img{max-width:190px;height:auto;display:block;margin-left:auto}
+.mast-logo .mono{font-size:19px;line-height:1.2}
+@media(max-width:640px){.mast-head{flex-direction:column}.mast-logo img{max-width:150px;margin-left:0}}
 .mast .kick{font-size:10px;letter-spacing:2.8px;text-transform:uppercase;color:var(--plum);font-weight:700;margin-bottom:8px}
 .mast h1{font-family:var(--serif);font-size:31px;font-weight:700;letter-spacing:.2px}
 .mast .date{font-size:12px;color:var(--muted);margin-top:6px;font-style:italic;font-family:var(--serif)}
@@ -161,8 +166,6 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
 <div class="shell">
 <aside class="side">
   <div>
-    <img src="logo.png" alt="Yunique AI" style="max-width:170px;height:auto;display:block" onerror="this.style.display='none';document.getElementById('brandLogo').style.display='block'">
-    <div class="mono" id="brandLogo" style="font-size:19px;line-height:1.2;display:none">Yunique&nbsp;AI</div>
     <div class="brand">Governance<br>Radar</div>
     <div class="tagline">AI · Privacy · Child Safety · Cyber<br>Law &amp; Litigation Intelligence</div>
   </div>
@@ -180,9 +183,17 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
 
 <main class="main">
 <div class="mast">
-  <div class="kick">Unified Legal Intelligence · US · EU &amp; UK · Africa · Global</div>
-  <h1>YAI Governance Radar</h1>
-  <div class="date">Database of record: July 22, 2026 · <span id="catCount"></span> categories · 5 domains · <span id="jurCount"></span> jurisdictions</div>
+  <div class="mast-head">
+    <div class="mast-txt">
+      <div class="kick">Unified Legal Intelligence · US · EU &amp; UK · Africa · Global</div>
+      <h1>Governance Radar</h1>
+      <div class="date">Database of record: July 22, 2026 · <span id="catCount"></span> categories · 5 domains · <span id="jurCount"></span> jurisdictions</div>
+    </div>
+    <div class="mast-logo">
+      <img src="logo.png" alt="Yunique AI" onerror="this.style.display='none';document.getElementById('brandLogo').style.display='block'">
+      <div class="mono" id="brandLogo" style="display:none">Yunique&nbsp;AI</div>
+    </div>
+  </div>
   <div class="statline">
     <div class="stat"><b id="stTotal">–</b><span>Instruments</span></div>
     <div class="stat"><b id="stForce">–</b><span>Enacted / In force</span></div>
@@ -310,7 +321,7 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
 <div id="tab-about" style="display:none">
   <div class="panel">
     <div class="ph"><h2>Method &amp; coverage</h2></div>
-    <p style="line-height:1.7;font-size:13.5px">The YAI Governance Radar covers <span id="aboutCount"></span> laws, bills, regulations, and frameworks across five regions (US Federal, US State, EU &amp; UK, Africa, Global) and five domains (AI &amp; automated decision-making, privacy &amp; data protection, children's online safety, cybersecurity &amp; breach, cross-cutting), plus a curated docket watch of <span id="aboutCases"></span> AI cases. Compiled July 2026 from primary sources (congress.gov, state legislatures, EUR-Lex, legislation.gov.uk, national regulators, court dockets) and verified secondary reporting. Each instrument records enforcement authority, maximum penalty, and key obligations — compliance-reference level, not citation-grade. <b>PRA</b> = private right of action. Stages: <i>In effect</i>, <i>Enacted — phasing in</i>, <i>Passed into law</i>, <i>Passed chamber / In committee / Proposed</i>, <i>Enjoined</i>, <i>Failed / Withdrawn</i>. The timeline counts down to each instrument's next major compliance date. Every instrument and case is also mapped to the <b>CLEAR™ Framework</b> — <b>C</b>larity (transparency, disclosure, labeling), <b>L</b>egal &amp; Risk Alignment (liability, penalties, enforcement), <b>E</b>nablement (literacy, skills, sandboxes), <b>A</b>ccountability (audits, assessments, oversight), <b>R</b>esponsible Execution (use restrictions, safety guardrails) — so the database reads as the evidence base under a CLEAR™ assessment. Updated weekly by the Monday digest; ask Claude to add, correct, or re-verify any entry.</p>
+    <p style="line-height:1.7;font-size:13.5px">The Governance Radar covers <span id="aboutCount"></span> laws, bills, regulations, and frameworks across five regions (US Federal, US State, EU &amp; UK, Africa, Global) and five domains (AI &amp; automated decision-making, privacy &amp; data protection, children's online safety, cybersecurity &amp; breach, cross-cutting), plus a curated docket watch of <span id="aboutCases"></span> AI cases. Compiled July 2026 from primary sources (congress.gov, state legislatures, EUR-Lex, legislation.gov.uk, national regulators, court dockets) and verified secondary reporting. Each instrument records enforcement authority, maximum penalty, and key obligations — compliance-reference level, not citation-grade. <b>PRA</b> = private right of action. Stages: <i>In effect</i>, <i>Enacted — phasing in</i>, <i>Passed into law</i>, <i>Passed chamber / In committee / Proposed</i>, <i>Enjoined</i>, <i>Failed / Withdrawn</i>. The timeline counts down to each instrument's next major compliance date. Every instrument and case is also mapped to the <b>CLEAR™ Framework</b> — <b>C</b>larity (transparency, disclosure, labeling), <b>L</b>egal &amp; Risk Alignment (liability, penalties, enforcement), <b>E</b>nablement (literacy, skills, sandboxes), <b>A</b>ccountability (audits, assessments, oversight), <b>R</b>esponsible Execution (use restrictions, safety guardrails) — so the database reads as the evidence base under a CLEAR™ assessment. Updated weekly by the Monday digest; ask Claude to add, correct, or re-verify any entry.</p>
   </div>
 </div>
 </main>
@@ -330,25 +341,16 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
 const DATA = window.LAWS_DATA || [];
 const CASES = window.CASES_DATA || [];
 const REVIEW = [
- {i:1,k:"Effective date",t:"Colorado HB 26-1139 (AI in Health Care)",issue:"Effective date not yet confirmed — shown as blank in the database.",how:"Check the enacted bill at leg.colorado.gov/bills/HB26-1139.",d:"2026-07-22"},
- {i:2,k:"Bill status",t:"DEFIANCE Act — chamber status",issue:"Recorded as passed Senate / awaiting House; may have moved since compilation.",how:"Check congress.gov for the current status.",d:"2026-07-22"},
- {i:3,k:"Bill status",t:"Great American AI Act (discussion draft)",issue:"Details drawn from early reporting on a discussion draft; sponsor text not yet reviewed.",how:"Locate the draft text and sponsors before citing.",d:"2026-07-22"},
- {i:4,k:"Docket",t:"Concord Music v. Anthropic II (5:26-cv-00880) — stay status",issue:"Motion to stay noted; outcome unverified.",how:"Check the docket on CourtListener before relying on the Oct 21 SJ date.",d:"2026-07-22"},
- {i:5,k:"Docket",t:"Character.AI cases — federal MDL consolidation",issue:"Consolidation pool noted but formal MDL grant unconfirmed.",how:"Check the JPML docket.",d:"2026-07-22"},
- {i:6,k:"Docket",t:"Litigation docket numbers (Raine; Disney/Universal v. Midjourney; Dow Jones v. Perplexity)",issue:"Several docket numbers and next-dates are best-effort from secondary reporting.",how:"Cite-check on CourtListener/PACER before professional use.",d:"2026-07-22"},
- {i:7,k:"Penalties",t:"Penalty figures — all entries",issue:"Maximum penalties are compliance-reference level, some inflation-adjusted figures approximate.",how:"Verify the current statutory figure before quoting in advice or content.",d:"2026-07-22"},
- {i:8,k:"Implementation",t:"Egypt PDPL executive regulations",issue:"Enforcement described as awaiting executive regulations; status may have changed.",how:"Check MCIT/PDPC announcements.",d:"2026-07-22"},
- {i:9,k:"Implementation",t:"African implementation timelines (Cameroon decrees, Ethiopia directives, Senegal reform)",issue:"Authority stand-up and implementing-rule dates are approximate.",how:"Verify with the national regulator before advising on these markets.",d:"2026-07-22"},
- {i:10,k:"Coverage",t:"Multistate tracking buckets (2026 minor-safety wave; MI/OH/PA privacy bills; WA AI bills)",issue:"Grouped placeholder entries — individual bills not yet broken out.",how:"Ask Claude to expand any bucket into individual bill entries.",d:"2026-07-22"},
- {i:11,k:"Effective date",t:"NY SAFE for Kids Act — compliance dates",issue:"Effective dates depend on AG rulemaking still in progress.",how:"Check ag.ny.gov rulemaking status.",d:"2026-07-22"},
- {i:12,k:"Effective date",t:"Connecticut SB 5 — provision-by-provision phase-in",issue:"Database shows the first milestone (Oct 1, 2026); which duties land at each later date needs mapping.",how:"Review the session law at cga.ct.gov; ask Claude to build the phase table.",d:"2026-07-22"},
- {i:13,k:"Implementation",t:"UK DUAA commencement — which UK GDPR amendments are in force",issue:"Phased commencement regulations were still landing at compilation.",how:"Check the latest commencement SI on legislation.gov.uk.",d:"2026-07-22"},
- {i:14,k:"Judgment call",t:"CLEAR™ pillar tags — all entries",issue:"Tags are Claude's application of the CLEAR™ definitions; they carry your brand and deserve your eye.",how:"Spot-check per pillar; tell Claude any reassignments.",d:"2026-07-22"},
- {i:15,k:"Voice",t:"Voice pass — UI copy and brief language",issue:"Drafted in Yunique's register from the yai-content profile; calibrated for posts, not UI.",how:"Read the CLEAR™ page, disclaimer and a generated brief; approve or redline.",d:"2026-07-22"},
- {i:16,k:"Branding",t:"Sidebar logo — awaiting original file",issue:"Text wordmark in place; the true Yunique AI logo file has not yet reached Claude's workspace.",how:"Attach the logo file (transparent PNG or SVG) in chat, or connect the folder containing it; Claude will embed it as-is.",d:"2026-07-22"},
- {i:17,k:"Bill status",t:"UK under-16 social media ban — legislative vehicle",issue:"Tracked from the government announcement (incl. Jul 15, 2026 curfew statement); the bill, mechanism (OSA powers vs new act) and dates are unconfirmed.",how:"Watch bills.parliament.uk and DSIT statements; update stage when a bill is introduced.",d:"2026-07-22"},
- {i:18,k:"Docket",t:"Wikimedia v Ofcom (OSA categorisation JR) — outcome details",issue:"Dismissal and proportionality signals recorded from secondary reporting; judgment citation and any appeal not verified.",how:"Check the judgment on Find Case Law / judiciary.uk.",d:"2026-07-22"},
- {i:19,k:"Docket",t:"Emotional Perception AI (UKSC) — precise holding",issue:"Judgment date (Feb 11, 2026) and Aerotel overhaul recorded; the exact holding on ANN patentability needs reading before citing.",how:"Read the judgment at supremecourt.uk; refine the case summary.",d:"2026-07-22"}
+ {i:1,k:"Bill status",t:"Great American AI Act (discussion draft)",issue:"Details drawn from early reporting on a discussion draft; sponsor text not yet reviewed.",how:"Locate the draft text and sponsors on congress.gov before citing.",d:"2026-07-22"},
+ {i:2,k:"Docket",t:"Concord Music v. Anthropic II (5:26-cv-00880) — stay status",issue:"Motion to stay noted; outcome unverified.",how:"Check the docket on CourtListener before relying on the Oct 21 2026 SJ date.",d:"2026-07-22"},
+ {i:3,k:"Docket",t:"Character.AI cases — federal MDL consolidation",issue:"Consolidation pool noted but formal MDL grant unconfirmed.",how:"Check the JPML docket.",d:"2026-07-22"},
+ {i:4,k:"Docket",t:"Litigation docket numbers (Raine; Disney/Universal v. Midjourney; Dow Jones v. Perplexity)",issue:"Several docket numbers and next-dates are best-effort from secondary reporting.",how:"Cite-check on CourtListener/PACER before professional use.",d:"2026-07-22"},
+ {i:5,k:"Implementation",t:"Egypt PDPL executive regulations",issue:"Enforcement described as awaiting executive regulations; status may have changed.",how:"Check MCIT/PDPC announcements.",d:"2026-07-22"},
+ {i:6,k:"Implementation",t:"African implementation timelines (Cameroon decrees, Ethiopia directives, Senegal reform)",issue:"Authority stand-up and implementing-rule dates are approximate.",how:"Verify with the national regulator before advising on these markets.",d:"2026-07-22"},
+ {i:7,k:"Implementation",t:"UK DUAA commencement — which UK GDPR amendments are in force",issue:"Phased commencement regulations were still landing at compilation.",how:"Check the latest commencement SI on legislation.gov.uk.",d:"2026-07-22"},
+ {i:8,k:"Bill status",t:"UK under-16 social media ban — legislative vehicle",issue:"Tracked from the government announcement (incl. Jul 15, 2026 curfew statement); the bill, mechanism (OSA powers vs new act) and dates are unconfirmed.",how:"Watch bills.parliament.uk and DSIT statements; update stage when a bill is introduced.",d:"2026-07-22"},
+ {i:9,k:"Docket",t:"Wikimedia v Ofcom (OSA categorisation JR) — outcome details",issue:"Dismissal and proportionality signals recorded from secondary reporting; judgment citation and any appeal not verified.",how:"Check the judgment on Find Case Law / judiciary.uk.",d:"2026-07-22"},
+ {i:10,k:"Docket",t:"Emotional Perception AI (UKSC) — precise holding",issue:"Judgment date (Feb 11, 2026) and Aerotel overhaul recorded; the exact holding on ANN patentability needs reading before citing.",how:"Read the judgment at supremecourt.uk; refine the case summary.",d:"2026-07-22"}
 ];
 const FEEDS = [
  {d:"2026-07-15",t:"UK announces under-16 social media ban + overnight curfews for 16–17s",p:"Australia-model ban, going further: livestreaming and stranger-contact functions blocked for under-16s; default midnight–6am curfews for 16–17-year-olds. Legislative vehicle TBC — tracked as Proposed.",tag:"high"},
@@ -656,7 +658,7 @@ $("briefBtn").onclick=()=>{
   const pending=f.filter(x=>["Passed chamber","In committee","Proposed"].includes(x.s));
   const scope=presetLabel?presetLabel+" (industry preset)":(state.domain!=="all"?domainName[state.domain]:"All domains")+(state.region!=="all"?" · "+state.region:"")+(state.ind!=="all"?" · "+state.ind:"")+(state.pillar?" · CLEAR™ "+PILLARS[state.pillar]:"");
   const PILLAR_BRIEF={C:"disclosure and transparency duties — telling people an AI is in use, labelling its output, documenting its training",L:"legal exposure — penalties, enforcement, lawsuits. This is where non-compliance costs money",E:"capability building — AI literacy, training, sandboxes. Obligations to equip your people",A:"proof obligations — audits, assessments, reports. What a regulator will ask you to produce",R:"limits on use — banned practices, safety guardrails, protections for minors and vulnerable users"};
-  let out=`YAI GOVERNANCE RADAR — CLEAR™ EXPOSURE BRIEF
+  let out=`GOVERNANCE RADAR — CLEAR™ EXPOSURE BRIEF · YUNIQUE AI
 Generated: ${today.toDateString()}
 Scope: ${scope} — ${f.length} laws in view
 Sorted by the CLEAR™ Framework: what each law demands of an organisation, not just what it says.
@@ -690,7 +692,7 @@ Nothing to action today; these show the direction of travel.
 Yunique AI — Govern AI with CLEAR™.
 Not sure where your AI governance gaps are? Start with the CLEAR™ Assessment: https://bit.ly/CLEARAssessment
 For information, not legal advice. Verify against primary sources.`;
-  openModal("Client Brief — "+scope,out,"yai-radar-brief-"+new Date().toISOString().slice(0,10)+".txt");
+  openModal("Client Brief — "+scope,out,"governance-radar-brief-"+new Date().toISOString().slice(0,10)+".txt");
 };
 $("profileBtn").onclick=()=>{
   const jur=state.jur!=="all"?state.jur:null;
@@ -700,7 +702,7 @@ $("profileBtn").onclick=()=>{
   const inforce=laws.filter(x=>["In effect","Enacted — phasing in"].includes(x.s));
   const pending=laws.filter(x=>["Passed into law","Passed chamber","In committee","Proposed"].includes(x.s));
   const soon=laws.filter(x=>x.eff&&daysTo(x.eff)>=0&&daysTo(x.eff)<=180).sort((a,b)=>daysTo(a.eff)-daysTo(b.eff));
-  let out=`YAI GOVERNANCE RADAR — JURISDICTION PROFILE\n${title}\nGenerated: ${today.toDateString()}\n\n`;
+  let out=`GOVERNANCE RADAR — JURISDICTION PROFILE · YUNIQUE AI\n${title}\nGenerated: ${today.toDateString()}\n\n`;
   if(!jur)out+="(Tip: filter to one jurisdiction — click a country in the table — for a single-country profile.)\n\n";
   out+=`Instruments tracked: ${laws.length}  ·  In force / phasing in: ${inforce.length}  ·  Pending: ${pending.length}\n\n`;
   out+=`━━ IN FORCE / PHASING IN ━━\n\n`+(inforce.map(x=>`• ${x.n}  [${x.s}${x.eff?", eff. "+fmt(x.eff):""}]\n  ${x.obl||x.sum}\n  Enforcement: ${x.auth||"—"} · Penalty: ${x.pen||"—"} · CLEAR™: ${(x.cl||[]).join("/")||"—"}`).join("\n\n")||"None.")+"\n\n";
@@ -708,11 +710,11 @@ $("profileBtn").onclick=()=>{
   out+=`━━ PENDING / PROPOSED ━━\n\n`+(pending.map(x=>`• ${x.n}  [${x.s}]`).join("\n")||"None.")+"\n\n";
   if(cs.length)out+=`━━ RELATED LITIGATION ━━\n\n`+cs.map(c=>`• ${c.cap}  [${c.st}] — ${c.nx}`).join("\n")+"\n\n";
   out+=`—\nYunique AI — Govern AI with CLEAR™. For information, not legal advice. Verify against primary sources.`;
-  openModal("Jurisdiction profile — "+title,out,"yai-radar-"+(jur||"all").toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-profile.txt");
+  openModal("Jurisdiction profile — "+title,out,"governance-radar-"+(jur||"all").toLowerCase().replace(/[^a-z0-9]+/g,"-")+"-profile.txt");
 };
 $("exportBtn").onclick=()=>{
   const arr=filtered().map(x=>({name:x.n,jurisdiction:x.j,region:x.r,category:x.c,domain:domainName[x.d],stage:x.s,introduced:x.intro,effective:x.eff,private_right_of_action:x.pra,industries:x.ind,enforcement:x.auth||null,max_penalty:x.pen||null,key_obligations:x.obl||null,summary:x.sum,source:x.src}));
-  openModal("Export — "+arr.length+" records (JSON)",JSON.stringify(arr,null,2),"yai-governance-radar-export.json");
+  openModal("Export — "+arr.length+" records (JSON)",JSON.stringify(arr,null,2),"governance-radar-export.json");
 };
 
 if(state.domain!=="all"){const p=document.querySelector(`#domainPills .pill[data-d="${state.domain}"]`);if(p){document.querySelectorAll("#domainPills .pill").forEach(x=>x.classList.remove("active"));p.classList.add("active")}}

@@ -917,11 +917,12 @@ window.LAWS_DATA = [
   "ind": [
    "Social media"
   ],
-  "sum": "Restricts addictive feeds and overnight notifications for minors absent parental consent; AG rulemaking to set effective compliance dates.",
+  "sum": "Restricts addictive feeds and overnight notifications for minors absent parental consent; takes effect 180 days after the AG finalises rules (NPRM Sep 2025, comment closed Dec 1 2025; OAG has up to one year to finalise).",
   "src": "https://ag.ny.gov",
   "auth": "NY AG",
   "pen": "Up to $5,000 per violation",
   "obl": "Parental consent for addictive feeds; overnight notification limits (pending AG rules)",
+  "lv": "2026-07-22",
   "cl": [
    "R"
   ]
@@ -1041,6 +1042,8 @@ window.LAWS_DATA = [
   ],
   "sum": "Signed May 27, 2026: frontier-model duties, AI-companion rules, automated employment decision requirements, content provenance; provisions phase in Oct 1, 2026 – Jan 1, 2028.",
   "src": "https://www.cga.ct.gov",
+  "lv": "2026-07-22",
+  "obl": "Phased: Oct 1 2026 — content provenance, AEDT anti-discrimination, subscription disclosures, AI-layoff WARN reporting; Jan 1 2027 — AI companion rules; Oct 1 2027 — automated employment-decision duties; Jan 1 2028 — social-media platform duties",
   "auth": "Connecticut AG",
   "pen": "CUTPA penalties (some cure/safe harbor)",
   "obl": "Frontier-model protocols; AI-companion safeguards; AEDT notices; provenance tools",
@@ -1130,13 +1133,14 @@ window.LAWS_DATA = [
   "d": "ai",
   "s": "Passed into law",
   "intro": "2026-01-28",
-  "eff": null,
+  "eff": "2027-01-01",
   "pra": false,
   "ind": [
    "Healthcare"
   ],
-  "sum": "Disclosure and oversight requirements for AI used in healthcare decision-making; part of Colorado's three-front AI-in-healthcare framework with SB 24-205 and HB 26-1195.",
+  "sum": "Signed June 2, 2026; effective Jan 1, 2027. Requires AI used in health-coverage utilization review to consider individual medical history (not solely generalised data) and human-clinician review of medical-necessity denials. Part of Colorado's three-front AI-in-healthcare framework with SB 24-205 and HB 26-1195.",
   "src": "https://leg.colorado.gov/bills/HB26-1139",
+  "lv": "2026-07-22",
   "auth": "Colorado DORA / AG",
   "pen": "Licensing discipline",
   "obl": "Disclosure and oversight for AI in healthcare decisions",
