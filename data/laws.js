@@ -2593,11 +2593,11 @@ window.LAWS_DATA = [
    "Social media",
    "Consumer tech"
   ],
-  "sum": "Royal Assent Apr 29, 2026; includes powers to amend the Online Safety Act to capture AI chatbots and new AI-CSAM offences.",
+  "sum": "Royal Assent Apr 29, 2026; includes powers to extend the Online Safety Act to AI chatbots, new AI-CSAM offences, and a duty on regulated services to remove non-consensual intimate images within 48 hours of notice (added Feb 2026).",
   "src": "https://www.legislation.gov.uk",
   "auth": "UK courts / Ofcom",
   "pen": "Criminal penalties",
-  "obl": "AI-CSAM offences; OSA extension powers to AI chatbots",
+  "obl": "AI-CSAM offences; OSA extension powers to AI chatbots; 48-hour NCII takedown duty",
   "cl": [
    "L",
    "R"
@@ -2610,7 +2610,7 @@ window.LAWS_DATA = [
   "r": "eu-uk",
   "c": "Cybersecurity & Breach",
   "d": "cyber",
-  "s": "In committee",
+  "s": "Passed chamber",
   "intro": "2025-11-12",
   "eff": null,
   "pra": false,
@@ -2618,11 +2618,11 @@ window.LAWS_DATA = [
    "Critical infrastructure",
    "Managed service providers"
   ],
-  "sum": "Expands NIS-style regulation to MSPs and data centres with stronger reporting and fines; in the Lords as of July 2026, expected to pass in stages during 2026.",
+  "sum": "Cleared the Commons June 2026; before the Lords (HL Bill 32) since Jun 17, 2026, Royal Assent expected late 2026. Pulls managed service providers, data centres and designated critical suppliers into a statutory regime.",
   "src": "https://bills.parliament.uk/bills/4035",
   "auth": "Proposed: expanded NIS regulators",
-  "pen": "Proposed turnover-based fines",
-  "obl": "MSP/data-centre regulation; tighter incident reporting",
+  "pen": "Proposed: up to £17M or 4% of global turnover",
+  "obl": "Expanded NIS scope (MSPs, data centres, critical suppliers); 24-hour initial incident reporting; strengthened regulator powers",
   "cl": [
    "A"
   ]
@@ -4340,5 +4340,9 @@ window.LAWS_DATA = [
    "E",
    "A"
   ]
- }
+ },
+ {"id":181,"n":"Children's Wellbeing and Schools Act 2026","j":"United Kingdom","r":"eu-uk","c":"Social Media & Minors","d":"kids","s":"Enacted — phasing in","intro":"2024-12-17","eff":"2026-04-29","pra":false,"ind":["Education","Social media"],"auth":"DfE / Ofcom (relevant provisions)","pen":"Provision-specific","obl":"Children's-safety and schools measures incl. online-safety-adjacent duties; commencement phased by regulations","sum":"Royal Assent Apr 29, 2026, the same day as the Crime and Policing Act — the two pillars of the UK's fast-tracked children's-safety package.","src":"https://bills.parliament.uk","cl":["R"]},
+ {"id":182,"n":"UK Under-16 Social Media Ban (announced)","j":"United Kingdom","r":"eu-uk","c":"Social Media & Minors","d":"kids","s":"Proposed","intro":"2026-07-15","eff":null,"pra":false,"ind":["Social media"],"auth":"Ofcom (expected)","pen":"TBC — OSA-level fines expected","obl":"Australia-model under-16 account ban going further: livestreaming and stranger-contact functions blocked for under-16s; default midnight–6am curfews for 16–17s (announced Jul 15, 2026)","sum":"Government-announced under-16 social media ban on the Australian model, plus overnight curfews for 16–17-year-olds; legislative vehicle and commencement dates still to be confirmed.","src":"https://commonslibrary.parliament.uk/research-briefings/cbp-10468/","cl":["R"]},
+ {"id":183,"n":"UK Digital ID Bill (Digital Access to Services)","j":"United Kingdom","r":"eu-uk","c":"Age Verification","d":"cross","s":"Proposed","intro":"2026-05-13","eff":null,"pra":false,"ind":["Government","Consumer tech"],"auth":"Proposed: DSIT / OfDIA","pen":"TBC","obl":"Statutory framework for government digital ID — designed to be useful, inclusive and trusted (Mar 2026 consultation); potential age-assurance backbone","sum":"Confirmed in the King's Speech May 13, 2026: relaunches the government digital-ID push — a privacy flashpoint and possible infrastructure for age assurance.","src":"https://commonslibrary.parliament.uk/research-briefings/cbp-10369/","cl":["E","R"]},
+ {"id":184,"n":"Protection of Children (Digital Safety and Data Protection) Bill","j":"United Kingdom","r":"eu-uk","c":"Social Media & Minors","d":"kids","s":"In committee","intro":"2024-10-16","eff":null,"pra":false,"ind":["Social media"],"auth":"Proposed","pen":"TBC","obl":"Would raise the digital age of consent and add child-safety duties","sum":"Private member's bill kept alive through the 2025–26 session as a pressure vehicle for a higher digital age of consent — now partly overtaken by the government's announced under-16 ban.","src":"https://bills.parliament.uk/bills/3778","cl":["R"]}
 ];
