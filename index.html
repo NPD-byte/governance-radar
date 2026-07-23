@@ -46,6 +46,11 @@ a{color:var(--plum)}
 .stat:first-child{border-left:none;padding-left:0}
 .stat b{display:block;font-family:var(--serif);font-size:24px;color:var(--plum)}
 .stat span{font-size:9.5px;letter-spacing:1.4px;color:var(--muted);text-transform:uppercase}
+.clearband{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:12px;cursor:pointer}
+.clearband .cb-lab{font-family:var(--serif);font-weight:700;color:var(--plum);font-size:12px;margin-right:6px}
+.clearband .cb-p{font-size:10.5px;letter-spacing:.4px;color:var(--gray);border:1px solid var(--hair);border-radius:2px;padding:2px 7px}
+.clearband .cb-p b{color:var(--plum)}
+.clearband:hover .cb-p{border-color:var(--plum)}
 .disclaimer{font-size:11.5px;color:var(--muted);font-style:italic;font-family:var(--serif);margin-bottom:20px;line-height:1.6}
 /* ---- panels ---- */
 .panel{background:var(--card);border:1px solid var(--hair);border-radius:4px;padding:18px 20px;margin-bottom:16px}
@@ -178,7 +183,7 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
     <button data-tab="analytics">Analytics <span class="n-sub">Charts &amp; trends</span></button>
     <button data-tab="about">Method <span class="n-sub">Coverage &amp; caveats</span></button>
   </nav>
-  <div class="foot">Curated by Yunique AI.<br>Privacy, security and law.<br>Refreshed each Monday, 8am.<br>For information, not legal advice.</div>
+  <div class="foot">Curated by Yunique AI.<br>Structured on the CLEAR™ Framework.<br>Privacy, security and law.<br>Refreshed each Monday, 8am.<br>For information, not legal advice.</div>
 </aside>
 
 <main class="main">
@@ -188,6 +193,10 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
       <div class="kick">Unified Legal Intelligence · US · EU &amp; UK · Africa · Caribbean · Global</div>
       <h1>Governance Radar</h1>
       <div class="date">Database of record: July 22, 2026 · <span id="catCount"></span> categories · 5 domains · <span id="jurCount"></span> jurisdictions</div>
+      <div class="clearband" id="clearBand" title="Every entry is mapped to the CLEAR™ Framework — click to explore">
+        <span class="cb-lab">Structured on the CLEAR™ Framework</span>
+        <span class="cb-p"><b>C</b>larity</span><span class="cb-p"><b>L</b>egal &amp; Risk</span><span class="cb-p"><b>E</b>nablement</span><span class="cb-p"><b>A</b>ccountability</span><span class="cb-p"><b>R</b>esponsible Execution</span>
+      </div>
     </div>
     <div class="mast-logo">
       <img src="logo.png" alt="Yunique AI" onerror="this.style.display='none';document.getElementById('brandLogo').style.display='block'">
@@ -723,6 +732,7 @@ if(state.win!==180){document.querySelectorAll(".winbtns button").forEach(x=>x.cl
 $("search").value=state.q;$("fRegion").value=state.region;$("fJur").value=state.jur;$("fStage").value=state.stage;$("fCat").value=state.cat;$("fInd").value=state.ind;$("fPra").checked=state.pra;
 if(state.q||state.region!=="all"||state.jur!=="all"||state.stage!=="all"||state.cat!=="all"||state.ind!=="all"||state.pra)$("filters").classList.add("open");
 
+const cb=$("clearBand");if(cb)cb.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab==="clear"));["db","feeds","cases","clear","review","analytics","about"].forEach(n=>$("tab-"+n).style.display=n==="clear"?"":"none");renderClearPage()};
 renderFeeds();renderCases();renderReview();renderAll();
 </script>
 </body>
