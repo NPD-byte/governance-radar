@@ -185,7 +185,7 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
 <div class="mast">
   <div class="mast-head">
     <div class="mast-txt">
-      <div class="kick">Unified Legal Intelligence · US · EU &amp; UK · Africa · Global</div>
+      <div class="kick">Unified Legal Intelligence · US · EU &amp; UK · Africa · Caribbean · Global</div>
       <h1>Governance Radar</h1>
       <div class="date">Database of record: July 22, 2026 · <span id="catCount"></span> categories · 5 domains · <span id="jurCount"></span> jurisdictions</div>
     </div>
@@ -259,7 +259,7 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
     <button class="btn" id="filterToggle">Filters</button>
   </div>
   <div class="filters" id="filters">
-    <select id="fRegion"><option value="all">Region: All</option><option value="us-federal">US Federal</option><option value="us-state">US State</option><option value="eu-uk">EU &amp; UK</option><option value="africa">Africa</option><option value="global">Global</option></select>
+    <select id="fRegion"><option value="all">Region: All</option><option value="us-federal">US Federal</option><option value="us-state">US State</option><option value="eu-uk">EU &amp; UK</option><option value="africa">Africa</option><option value="caribbean">Caribbean</option><option value="global">Global</option></select>
     <select id="fJur"><option value="all">Jurisdiction: All</option></select>
     <select id="fStage"><option value="all">Stage: All</option></select>
     <select id="fCat"><option value="all">Category: All</option></select>
@@ -321,7 +321,7 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
 <div id="tab-about" style="display:none">
   <div class="panel">
     <div class="ph"><h2>Method &amp; coverage</h2></div>
-    <p style="line-height:1.7;font-size:13.5px">The Governance Radar covers <span id="aboutCount"></span> laws, bills, regulations, and frameworks across five regions (US Federal, US State, EU &amp; UK, Africa, Global) and five domains (AI &amp; automated decision-making, privacy &amp; data protection, children's online safety, cybersecurity &amp; breach, cross-cutting), plus a curated docket watch of <span id="aboutCases"></span> AI cases. Compiled July 2026 from primary sources (congress.gov, state legislatures, EUR-Lex, legislation.gov.uk, national regulators, court dockets) and verified secondary reporting. Each instrument records enforcement authority, maximum penalty, and key obligations — compliance-reference level, not citation-grade. <b>PRA</b> = private right of action. Stages: <i>In effect</i>, <i>Enacted — phasing in</i>, <i>Passed into law</i>, <i>Passed chamber / In committee / Proposed</i>, <i>Enjoined</i>, <i>Failed / Withdrawn</i>. The timeline counts down to each instrument's next major compliance date. Every instrument and case is also mapped to the <b>CLEAR™ Framework</b> — <b>C</b>larity (transparency, disclosure, labeling), <b>L</b>egal &amp; Risk Alignment (liability, penalties, enforcement), <b>E</b>nablement (literacy, skills, sandboxes), <b>A</b>ccountability (audits, assessments, oversight), <b>R</b>esponsible Execution (use restrictions, safety guardrails) — so the database reads as the evidence base under a CLEAR™ assessment. Updated weekly by the Monday digest; ask Claude to add, correct, or re-verify any entry.</p>
+    <p style="line-height:1.7;font-size:13.5px">The Governance Radar covers <span id="aboutCount"></span> laws, bills, regulations, and frameworks across six regions (US Federal, US State, EU &amp; UK, Africa, Caribbean, Global) and five domains (AI &amp; automated decision-making, privacy &amp; data protection, children's online safety, cybersecurity &amp; breach, cross-cutting), plus a curated docket watch of <span id="aboutCases"></span> AI cases. Compiled July 2026 from primary sources (congress.gov, state legislatures, EUR-Lex, legislation.gov.uk, national regulators, court dockets) and verified secondary reporting. Each instrument records enforcement authority, maximum penalty, and key obligations — compliance-reference level, not citation-grade. <b>PRA</b> = private right of action. Stages: <i>In effect</i>, <i>Enacted — phasing in</i>, <i>Passed into law</i>, <i>Passed chamber / In committee / Proposed</i>, <i>Enjoined</i>, <i>Failed / Withdrawn</i>. The timeline counts down to each instrument's next major compliance date. Every instrument and case is also mapped to the <b>CLEAR™ Framework</b> — <b>C</b>larity (transparency, disclosure, labeling), <b>L</b>egal &amp; Risk Alignment (liability, penalties, enforcement), <b>E</b>nablement (literacy, skills, sandboxes), <b>A</b>ccountability (audits, assessments, oversight), <b>R</b>esponsible Execution (use restrictions, safety guardrails) — so the database reads as the evidence base under a CLEAR™ assessment. Updated weekly by the Monday digest; ask Claude to add, correct, or re-verify any entry.</p>
   </div>
 </div>
 </main>
@@ -608,8 +608,8 @@ function renderAnalytics(){
   mkChart("chTimeline",{type:"bar",data:{labels:qs,datasets:[{label:"Compliance dates",data:qs.map(k=>DATA.filter(x=>x.eff&&qOf(x.eff)===k).length),backgroundColor:qs.map(k=>k===qOf(new Date().toISOString().slice(0,10))?"#a33434":"#6d1f4e")}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{precision:0}}}}});
   const doms=Object.keys(domainName);
   mkChart("chDomain",{type:"doughnut",data:{labels:doms.map(d=>domainName[d]),datasets:[{data:doms.map(d=>DATA.filter(x=>x.d===d).length),backgroundColor:["#6d1f4e","#3f6b3a","#96660f","#a33434","#31567f"]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"right"}}}});
-  const regs={"us-federal":"US Federal","us-state":"US State","eu-uk":"EU & UK","africa":"Africa","global":"Global"};
-  mkChart("chRegion",{type:"bar",data:{labels:Object.values(regs),datasets:[{data:Object.keys(regs).map(r=>DATA.filter(x=>x.r===r).length),backgroundColor:["#6d1f4e","#b0407e","#31567f","#96660f","#2f6b62"],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{precision:0}}}}});
+  const regs={"us-federal":"US Federal","us-state":"US State","eu-uk":"EU & UK","africa":"Africa","caribbean":"Caribbean","global":"Global"};
+  mkChart("chRegion",{type:"bar",data:{labels:Object.values(regs),datasets:[{data:Object.keys(regs).map(r=>DATA.filter(x=>x.r===r).length),backgroundColor:["#6d1f4e","#b0407e","#31567f","#96660f","#c98a1a","#2f6b62"],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{precision:0}}}}});
   const stages=[...new Set(DATA.map(x=>x.s))].sort((a,b)=>DATA.filter(x=>x.s===b).length-DATA.filter(x=>x.s===a).length);
   const stageHex={"In effect":"#3f6b3a","Enacted — phasing in":"#2f6b62","Passed into law":"#7a9c3a","Passed chamber":"#31567f","In committee":"#c2701e","Proposed":"#e0a13a","Enjoined":"#a33434","Failed":"#8a7f72","Withdrawn":"#b3a897"};
   mkChart("chStage",{type:"bar",data:{labels:stages,datasets:[{data:stages.map(s=>DATA.filter(x=>x.s===s).length),backgroundColor:stages.map(s=>stageHex[s]||"#6d1f4e"),borderRadius:4}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{precision:0}}}}});
