@@ -51,6 +51,9 @@ a{color:var(--plum)}
 .clearband .cb-p{font-size:10.5px;letter-spacing:.4px;color:var(--gray);border:1px solid var(--hair);border-radius:2px;padding:2px 7px}
 .clearband .cb-p b{color:var(--plum)}
 .clearband:hover .cb-p{border-color:var(--plum)}
+.syncbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--hair)}
+.syncbar .sync-meta{font-size:11.5px;color:var(--muted);line-height:1.5;flex:1;min-width:200px}
+.syncbar .btn.primary[disabled]{opacity:.55;cursor:default}
 .disclaimer{font-size:11.5px;color:var(--muted);font-style:italic;font-family:var(--serif);margin-bottom:20px;line-height:1.6}
 /* ---- panels ---- */
 .panel{background:var(--card);border:1px solid var(--hair);border-radius:4px;padding:18px 20px;margin-bottom:16px}
@@ -181,6 +184,7 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
     <button data-tab="clear">CLEAR™ <span class="n-sub">The framework</span></button>
     <button data-tab="review">Review Queue <span id="revBadge"></span><span class="n-sub">Human in the loop</span></button>
     <button data-tab="analytics">Analytics <span class="n-sub">Charts &amp; trends</span></button>
+    <button data-tab="responsible">Responsible AI <span class="n-sub">How it works &amp; limits</span></button>
     <button data-tab="about">Method <span class="n-sub">Coverage &amp; caveats</span></button>
   </nav>
   <div class="foot">Curated by Yunique AI.<br>Structured on the CLEAR™ Framework.<br>Privacy, security and law.<br>Refreshed each Monday, 8am.<br>For information, not legal advice.</div>
@@ -209,6 +213,10 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
     <div class="stat"><b id="stPend">–</b><span>Pending</span></div>
     <div class="stat"><b id="stPra">–</b><span>Private right of action</span></div>
     <div class="stat"><b id="stCases">–</b><span>Cases watched</span></div>
+  </div>
+  <div class="syncbar">
+    <button class="btn primary" id="syncBtn">⟳ Sync now</button>
+    <span class="sync-meta" id="syncStatus">Runs the AI monitoring digest to pull new laws, cases and developments into the radar.</span>
   </div>
 </div>
 <div class="disclaimer">A working tool, not counsel. Verify against primary sources and dockets before you advise anyone — defensibility starts at the source.</div>
@@ -327,6 +335,49 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
   </div>
 </div>
 
+<div id="tab-responsible" style="display:none">
+  <div class="panel" style="border-left:3px solid var(--plum)">
+    <div class="ph"><h2>Responsible AI — how the Governance Radar works, and its limits</h2></div>
+    <p style="font-size:12.5px;color:#4e463c;line-height:1.6">This tool is decision-support for legal and compliance professionals. It is <b>not legal advice</b> and does not itself carry out any reserved legal activity. Every output must be checked against primary sources by a qualified person before it is relied upon.</p>
+  </div>
+
+  <div class="panel">
+    <div class="ph"><h2>How the AI is used</h2></div>
+    <p style="line-height:1.7;font-size:13px">The Radar pairs a curated legal database with a scheduled, <b>human-supervised AI monitoring routine</b>. On a weekly cadence — and on demand via <b>Sync now</b> — an AI agent searches primary and authoritative sources, triages what is material, summarises it, classifies each development against the CLEAR™ framework, drafts plain-English briefings, and flags approaching compliance dates. The AI <i>assists</i> research and drafting; it does not make legal determinations. Large-language-model reasoning is used for summarisation, classification and triage — not as a source of legal truth.</p>
+  </div>
+
+  <div class="panel">
+    <div class="ph"><h2>Human in the loop</h2></div>
+    <p style="line-height:1.7;font-size:13px">Every AI-generated change is logged to the <b>Review Queue</b> as <i>pending verification</i>. A qualified reviewer confirms each addition or amendment against the cited primary source before it is treated as reliable; each entry carries a <b>“Last verified”</b> date and turns amber after 90 days to prompt re-checking. No entry updates silently. This preserves professional accountability and creates an auditable trail of what changed, when, and on what source.</p>
+  </div>
+
+  <div class="panel">
+    <div class="ph"><h2>Sources</h2></div>
+    <p style="line-height:1.7;font-size:13px">The database is compiled from primary and authoritative sources — legislation portals (legislation.gov.uk, EUR-Lex, congress.gov, national gazettes), court and tribunal records (Find Case Law, CourtListener/PACER), and official regulators (ICO, SRA, Ofcom, EU and national data-protection authorities) — supported by verified secondary legal reporting. Every entry links to its primary source so users can verify directly.</p>
+  </div>
+
+  <div class="panel" style="border-left:3px solid var(--amber)">
+    <div class="ph"><h2>Known limitations</h2></div>
+    <ul style="margin:0 0 0 18px;font-size:12.5px;line-height:1.8">
+      <li><b>Not legal advice.</b> Outputs are informational; obtain qualified advice for any specific matter.</li>
+      <li><b>AI can err.</b> Summaries and classifications may contain inaccuracies or omissions (“hallucinations”); this is mitigated by source-citation and mandatory human review, not eliminated.</li>
+      <li><b>Timeliness.</b> Between syncs the database may lag very recent changes; always confirm the current position against the primary source.</li>
+      <li><b>Coverage is broad, not exhaustive.</b> Some fast-moving items (e.g. bills mid-passage, penalty figures, implementation timelines) are best-effort and flagged for verification.</li>
+      <li><b>Interpretation.</b> CLEAR™ pillar tags are a governance lens applied by the tool, not a legal opinion.</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <div class="ph"><h2>Data protection &amp; privacy</h2></div>
+    <p style="line-height:1.7;font-size:13px">The Radar is built to minimise personal data. Its database concerns laws, bills and cases — not individuals — and draws on public legal sources; incidental personal data appearing in published case law is processed only as part of that public record. The tool requires no account and stores users’ filter and review preferences locally in the browser. Any client-matter context a user supplies to tailor a briefing is handled under the user’s own control and subject to the same human-review step; it is not used to train models. Because a qualified person reviews every output, the tool does not make decisions producing legal or similarly significant effects on an individual on a <i>solely</i> automated basis (UK GDPR Art. 22 / Data (Use and Access) Act 2025). Processing engages the UK GDPR and Data Protection Act 2018; lawful basis, transparency and retention are addressed in our data-protection documentation.</p>
+  </div>
+
+  <div class="panel">
+    <div class="ph"><h2>Accountability</h2></div>
+    <p style="line-height:1.7;font-size:13px">The Governance Radar is maintained by Yunique AI and structured on the CLEAR™ Framework — the same accountability discipline it helps others apply. Corrections are welcome and acted upon: ask Claude to add, amend or re-verify any entry, and the change is logged to the Review Queue for confirmation.</p>
+  </div>
+</div>
+
 <div id="tab-about" style="display:none">
   <div class="panel">
     <div class="ph"><h2>Method &amp; coverage</h2></div>
@@ -400,7 +451,7 @@ const PILLAR_DEF={
 };
 function gotoPillar(p){
   document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab==="clear"));
-  ["db","feeds","cases","clear","review","analytics","about"].forEach(n=>$("tab-"+n).style.display=n==="clear"?"":"none");
+  ["db","feeds","cases","clear","review","analytics","responsible","about"].forEach(n=>$("tab-"+n).style.display=n==="clear"?"":"none");
   renderClearPage();
   const sec=$("pil-"+p);
   if(sec){if(sec.scrollIntoView)sec.scrollIntoView({behavior:"smooth",block:"start"});sec.classList.remove("flash");void sec.offsetWidth;sec.classList.add("flash")}
@@ -408,7 +459,7 @@ function gotoPillar(p){
 document.addEventListener("click",e=>{const t=e.target.closest(".cltag");if(t&&t.dataset.p){e.stopPropagation();gotoPillar(t.dataset.p)}});
 function filterByPillar(p){
   document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab==="db"));
-  ["db","feeds","cases","clear","review","analytics","about"].forEach(n=>$("tab-"+n).style.display=n==="db"?"":"none");
+  ["db","feeds","cases","clear","review","analytics","responsible","about"].forEach(n=>$("tab-"+n).style.display=n==="db"?"":"none");
   state={...state,q:"",domain:"all",region:"all",stage:"all",cat:"all",ind:"all",pra:false};
   $("search").value="";$("fRegion").value="all";$("fStage").value="all";$("fCat").value="all";$("fInd").value="all";$("fPra").checked=false;
   document.querySelectorAll("#domainPills .pill").forEach(x=>x.classList.toggle("active",x.dataset.d==="all"));
@@ -602,7 +653,7 @@ function renderAll(){renderRadar();renderTable();updatePillarBanner();save()}
 
 document.querySelectorAll(".nav button").forEach(t=>t.onclick=()=>{
   document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));t.classList.add("active");
-  ["db","feeds","cases","clear","review","analytics","about"].forEach(n=>$("tab-"+n).style.display=t.dataset.tab===n?"":"none");
+  ["db","feeds","cases","clear","review","analytics","responsible","about"].forEach(n=>$("tab-"+n).style.display=t.dataset.tab===n?"":"none");
   if(t.dataset.tab==="analytics")setTimeout(renderAnalytics,50);
   if(t.dataset.tab==="clear")renderClearPage();
   if(t.dataset.tab==="review")renderReview();
@@ -732,7 +783,38 @@ if(state.win!==180){document.querySelectorAll(".winbtns button").forEach(x=>x.cl
 $("search").value=state.q;$("fRegion").value=state.region;$("fJur").value=state.jur;$("fStage").value=state.stage;$("fCat").value=state.cat;$("fInd").value=state.ind;$("fPra").checked=state.pra;
 if(state.q||state.region!=="all"||state.jur!=="all"||state.stage!=="all"||state.cat!=="all"||state.ind!=="all"||state.pra)$("filters").classList.add("open");
 
-const cb=$("clearBand");if(cb)cb.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab==="clear"));["db","feeds","cases","clear","review","analytics","about"].forEach(n=>$("tab-"+n).style.display=n==="clear"?"":"none");renderClearPage()};
+const cb=$("clearBand");if(cb)cb.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab==="clear"));["db","feeds","cases","clear","review","analytics","responsible","about"].forEach(n=>$("tab-"+n).style.display=n==="clear"?"":"none");renderClearPage()};
+
+// ---- Sync now: trigger the monitoring digest on demand from inside the app ----
+const SYNC_TASK="monday-regulatory-digest";
+const relTime=iso=>{try{const d=(Date.now()-new Date(iso))/1000;if(d<90)return"just now";if(d<3600)return Math.round(d/60)+" min ago";if(d<86400)return Math.round(d/3600)+"h ago";return Math.round(d/86400)+"d ago"}catch(e){return""}};
+function syncIdleMsg(){
+  let last="";try{last=localStorage.getItem("urit-lastsync")}catch(e){}
+  const base="Runs the AI monitoring digest to pull new laws, cases and developments into the radar.";
+  $("syncStatus").innerHTML=base+(last?` <b>Last sync requested ${relTime(last)}.</b>`:"");
+}
+async function doSync(){
+  const btn=$("syncBtn"),bar=btn.closest(".syncbar");
+  const cw=window.cowork;
+  if(!(cw&&typeof cw.runScheduledTask==="function")){
+    $("syncStatus").innerHTML="Live sync runs inside the Cowork app. Open this radar in Cowork and press Sync, or ask Claude: <i>“run my regulatory digest.”</i>";
+    return;
+  }
+  btn.disabled=true;bar.classList.add("busy");
+  $("syncStatus").innerHTML="<b>Sync started.</b> The regulatory-monitoring digest is scanning primary sources across all seven regions and the docket watch — new laws, cases and feed items will be written into the radar. This runs in the background and can take a few minutes; a human-review step flags every change before it is relied upon.";
+  try{
+    await cw.runScheduledTask(SYNC_TASK);
+    try{localStorage.setItem("urit-lastsync",new Date().toISOString())}catch(e){}
+    $("syncStatus").innerHTML="<b>Sync requested ✓</b> — the digest is running. Reload the radar in a few minutes (header ⟳) to see new entries and the refreshed Review Queue.";
+  }catch(err){
+    $("syncStatus").innerHTML="Couldn't start the sync automatically. Ask Claude: <i>“run my regulatory digest”</i> — it does the same monitoring run.";
+  }finally{
+    setTimeout(()=>{btn.disabled=false;bar.classList.remove("busy")},5000);
+  }
+}
+$("syncBtn").onclick=doSync;
+syncIdleMsg();
+
 renderFeeds();renderCases();renderReview();renderAll();
 </script>
 </body>
