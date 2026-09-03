@@ -1,5 +1,61 @@
 window.LAWS_DATA = [
  {
+  "id": 199,
+  "n": "DSA designation: ChatGPT (VLOSE); Reddit & Roblox (VLOPs)",
+  "j": "European Union",
+  "r": "eu-uk",
+  "c": "Platform Governance / Systemic Risk",
+  "d": "cross",
+  "s": "Enacted — phasing in",
+  "intro": "2026-08-31",
+  "eff": "2027-01-31",
+  "pra": false,
+  "ind": [
+   "Consumer tech",
+   "Social media",
+   "Gaming"
+  ],
+  "sum": "On 31 August 2026 the European Commission designated ChatGPT as a Very Large Online Search Engine and Reddit and Roblox as Very Large Online Platforms under the Digital Services Act, each having declared 45M+ average monthly EU users. The services have four months from notification — i.e. by January 2027 — to meet the additional VLOP/VLOSE duties: annual systemic-risk assessment and mitigation covering illegal content, negative effects on minors, users' physical and mental well-being, fundamental rights, electoral processes and public security, plus independent audits, data access for vetted researchers and an ad repository. First time a general-purpose AI assistant is regulated as a search engine.",
+  "src": "https://digital-strategy.ec.europa.eu/en/news/commission-designates-chatgpt-reddit-roblox-under-digital-services-act",
+  "auth": "European Commission (DG CNECT)",
+  "pen": "Up to 6% of global annual turnover (DSA Art. 74); periodic penalty payments; interim measures",
+  "obl": "Annual systemic-risk assessment and mitigation; independent audit; researcher data access; ad repository; crisis-response cooperation",
+  "cl": [
+   "L",
+   "A",
+   "R"
+  ],
+  "lv": "2026-09-03"
+ },
+ {
+  "id": 200,
+  "n": "California SB 1119 — Adam's Law (companion chatbots: children's safety)",
+  "j": "California",
+  "r": "us-state",
+  "c": "AI Companions / Children's Safety",
+  "d": "kids",
+  "s": "Passed chamber",
+  "intro": "",
+  "eff": "",
+  "pra": false,
+  "ind": [
+   "AI developers",
+   "Consumer tech",
+   "Social media"
+  ],
+  "sum": "Passed both chambers on 31 August 2026 (Sen. Padilla; principal coauthors Bauer-Kahan and Wicks) and sent to Governor Newsom; not yet signed. Would require companion-chatbot providers to determine user age, identify and address safety risks before making products available to minors, undergo independent audits, and protect 13-17-year-olds from self-harm content, sexually exploitative material and other high-risk interactions. Named for Adam Raine, whose parents' wrongful-death suit against OpenAI is on this tracker's docket. Part of a package of roughly 16 AI bills and 8 privacy bills cleared before the session deadline.",
+  "src": "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB1119",
+  "auth": "California Attorney General; private enforcement as enacted",
+  "pen": "Not yet verified — confirm against the enrolled text",
+  "obl": "Age determination; pre-deployment risk identification and mitigation for minors; independent audits; crisis-referral and harmful-content protections for 13-17s",
+  "cl": [
+   "C",
+   "L",
+   "A"
+  ],
+  "lv": "2026-09-03"
+ },
+ {
   "id": 1,
   "n": "TAKE IT DOWN Act",
   "j": "US Federal",
