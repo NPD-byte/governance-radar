@@ -82,6 +82,7 @@ a{color:var(--plum)}
 .btn:hover{background:var(--ink);color:var(--card)}
 .btn.primary{background:var(--plum);border-color:var(--plum);color:#fff}
 .btn.primary:hover{background:var(--plumdark)}
+a.btn{text-decoration:none;display:inline-block}
 select.btn{text-transform:none;letter-spacing:.3px;font-weight:600}
 .pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .pill{background:none;border:1px solid var(--hair);border-radius:2px;padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer;color:var(--ink);font-family:var(--sans)}
@@ -199,6 +200,7 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
     <button class="active" data-tab="db">Database <span class="n-sub">Laws, bills &amp; frameworks</span></button>
     <button data-tab="feeds">The Week <span class="n-sub">Monday intelligence feed</span></button>
     <button data-tab="cases">Docket Watch <span class="n-sub">AI litigation</span></button>
+    <button data-tab="sectors">Sectors <span class="n-sub">Your industry &amp; regulators</span></button>
     <button data-tab="foundations">Foundations <span class="n-sub">Global AI frameworks</span></button>
     <button data-tab="clear">CLEAR™ <span class="n-sub">The framework</span></button>
     <button data-tab="review">Review Queue <span id="revBadge"></span><span class="n-sub">Human in the loop</span></button>
@@ -345,7 +347,28 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
     <div class="ph"><h2>The CLEAR™ Framework</h2></div>
     <p style="font-size:13.5px;line-height:1.7">Organisations roll out AI with confidence and zero accountability. CLEAR™ is Yunique AI's framework for closing that gap — governing AI with legally defensible decisions. Every law, bill and case in this radar is mapped to the pillar(s) of work it creates for an organisation. Not what the law says. What it demands of you. Click any pillar's "Filter the database" button to see its instruments; the small plum tags on entries throughout the radar link back to this page.</p>
   </div>
+
+  <div class="panel">
+    <div class="ph"><h2>CLEAR™ × the global AI canon</h2></div>
+    <p style="font-size:13px;line-height:1.7;color:#4e463c">CLEAR™ is not a rival taxonomy — it is an operational re-cut of the global consensus, organised by the work each instrument creates rather than by abstract value. The crosswalk below shows how the five pillars absorb the two foundational soft-law standards — the <b>UNESCO Recommendation on the Ethics of AI</b> (2021, ten principles) and the <b>OECD AI Principles</b> (2019, five principles) — and where the binding instruments, the <b>EU AI Act</b> and the <b>Council of Europe Framework Convention</b>, give each pillar legal teeth. Together they cover all ten UNESCO principles and all five OECD principles.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:14px;margin:4px 0 16px;font-size:11px;color:var(--muted)">
+      <span><span style="display:inline-block;padding:1px 8px;border-radius:12px;border:1px dashed #c2b8a8;color:#6b6357;font-size:10px;vertical-align:1px;margin-right:5px">dashed</span>Soft law — UNESCO &amp; OECD (guidance, not enforceable)</span>
+      <span><span style="display:inline-block;padding:1px 8px;border-radius:12px;background:var(--plum);color:#fff;font-size:10px;vertical-align:1px;margin-right:5px">solid</span>Binding law — EU AI Act &amp; CoE Convention (enforceable)</span>
+    </div>
+
+    <div id="clearXwalk" style="display:flex;flex-direction:column;gap:12px"></div>
+  </div>
+
   <div id="clearSecs"></div>
+
+  <div class="panel" style="border-left:3px solid var(--plum);background:var(--plumbg)">
+    <div class="ph"><h2>Is your AI use legally defensible?</h2></div>
+    <p style="line-height:1.7;font-size:13.5px">This radar shows what the law demands across the five pillars. To see where <i>your</i> organisation stands against them, take the free <b>CLEAR™ Assessment</b> — 22 questions, scored across Clarity, Legal &amp; Risk Alignment, Enablement, Accountability and Responsible Execution, returned in about ten minutes.</p>
+    <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:10px">
+      <a class="btn primary" href="https://isyouraiuselegallydefensible.com" target="_blank" rel="noopener">Take the CLEAR™ Assessment →</a>
+      <a class="btn" href="https://yuniqueai.com" target="_blank" rel="noopener">Book a conversation</a>
+    </div>
+  </div>
 </div>
 
 <div id="tab-review" style="display:none">
@@ -408,10 +431,52 @@ tbody tr:not(.detail):hover{background:var(--plumbg)}
   </div>
 </div>
 
+<div id="tab-sectors" style="display:none">
+  <div class="panel">
+    <div class="ph"><h2>Your sector, your regulators</h2></div>
+    <p style="line-height:1.7;font-size:13.5px">Horizontal AI laws are only half the picture. Your <b>sector regulator</b> is already setting expectations for how AI is governed in your industry — often through existing rules rather than new ones. This view maps the regulators that matter to each sector, their current posture, and the instruments in this radar that apply. Click through to see your sector's slice of the database.</p>
+    <p style="font-size:11.5px;color:var(--muted);margin-top:8px;font-style:italic">Regulator positions move quickly; each is a pointer to the primary source, not a substitute for it. Verified September 2026.</p>
+  </div>
+
+  <div class="panel" style="border-left:3px solid var(--plum);background:var(--plumbg)">
+    <div class="ph"><h2>Get alerts for your sector</h2></div>
+    <p style="font-size:13px;line-height:1.65;color:#4e463c">Once a month: a short brief on what changed for your sector and any compliance date falling inside 90 days. No spam — unsubscribe any time.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;align-items:center">
+      <select id="alertSector" style="padding:8px;border:1px solid var(--hair);border-radius:2px;font-size:12px;background:var(--card);color:var(--ink)"></select>
+      <input id="alertEmail" type="email" placeholder="you@organisation.com" style="padding:8px 10px;border:1px solid var(--hair);border-radius:2px;font-size:12px;min-width:220px">
+      <a id="alertBtn" class="btn primary" href="mailto:yunique@yuniqueai.com">Request alerts →</a>
+    </div>
+    <p style="font-size:10.5px;color:var(--muted);margin-top:10px;font-style:italic">Opens your email app with the request pre-filled, sent to Yunique AI. Your filter and sector choices are already saved on this device, so the radar reopens on your view.</p>
+  </div>
+
+  <div id="sectorGrid"></div>
+</div>
+
 <div id="tab-about" style="display:none">
   <div class="panel">
     <div class="ph"><h2>Method &amp; coverage</h2></div>
     <p style="line-height:1.7;font-size:13.5px">The Governance Radar covers <span id="aboutCount"></span> laws, bills, regulations, and frameworks across seven regions (US Federal, US State, EU &amp; UK, Africa, Caribbean, Asia, Global) and five domains (AI &amp; automated decision-making, privacy &amp; data protection, children's online safety, cybersecurity &amp; breach, cross-cutting), plus a curated docket watch of <span id="aboutCases"></span> AI cases. Compiled July 2026 from primary sources (congress.gov, state legislatures, EUR-Lex, legislation.gov.uk, national regulators, court dockets) and verified secondary reporting. Each instrument records enforcement authority, maximum penalty, and key obligations — compliance-reference level, not citation-grade. <b>PRA</b> = private right of action. Stages: <i>In effect</i>, <i>Enacted — phasing in</i>, <i>Passed into law</i>, <i>Passed chamber / In committee / Proposed</i>, <i>Enjoined</i>, <i>Failed / Withdrawn</i>. The timeline counts down to each instrument's next major compliance date. Every instrument and case is also mapped to the <b>CLEAR™ Framework</b> — <b>C</b>larity (transparency, disclosure, labeling), <b>L</b>egal &amp; Risk Alignment (liability, penalties, enforcement), <b>E</b>nablement (literacy, skills, sandboxes), <b>A</b>ccountability (audits, assessments, oversight), <b>R</b>esponsible Execution (use restrictions, safety guardrails) — so the database reads as the evidence base under a CLEAR™ assessment. Updated weekly by the Monday digest; ask Claude to add, correct, or re-verify any entry.</p>
+  </div>
+
+  <div class="panel">
+    <div class="ph"><h2>Who's behind the Radar</h2></div>
+    <p style="line-height:1.7;font-size:13.5px">The Governance Radar is built and maintained by <b>Yunique Demann</b>, founder of <b>Yunique AI</b> — an AI governance practice for regulated organisations. Her background sits at the intersection of security, privacy and law: a former <b>CISO</b> and <b>Data Protection Officer</b>, most recently <b>VP of Information Security, Privacy &amp; AI Governance</b> leading an enterprise security mandate, and a board advisor to an AI-security company. She holds an <b>MA in Law</b>, the <b>CIPP/E</b> privacy certification, and is a certified <b>ISO/IEC 42001 Lead Auditor</b>.</p>
+    <p style="line-height:1.7;font-size:13.5px;margin-top:10px">The Radar reflects the discipline Yunique AI applies with clients. <i>Defensible AI is what we believe; Legally Defensible AI is what we build with organisations.</i> It is built around one question a board or regulator can ask at any moment: <b>if your organisation had to defend an AI-enabled decision tomorrow, could you?</b></p>
+  </div>
+
+  <div class="panel">
+    <div class="ph"><h2>Who this is for</h2></div>
+    <p style="line-height:1.7;font-size:13.5px">The Radar is built for the people who <b>answer for AI</b> inside regulated organisations — Chief Risk, Compliance and Privacy Officers, General Counsel and DPOs, and the AI governance, security and data leaders who work alongside them. It is aimed at medium and large organisations in <b>financial services, banking, insurance, healthcare, government, legal and professional services</b>, with a UK, EU and US focus. If you own AI risk, oversight or assurance, this is your horizon scanner.</p>
+  </div>
+
+  <div class="panel" style="border-left:3px solid var(--plum);background:var(--plumbg)">
+    <div class="ph"><h2>From radar to readiness</h2></div>
+    <p style="line-height:1.7;font-size:13.5px">The Radar shows you what the law <i>demands</i>. To find out whether your own AI use is <b>legally defensible</b>, start with the free <b>CLEAR™ Assessment</b> — a 22-question diagnostic across the five pillars, scored and returned in about ten minutes, with an AI policy template and no account needed.</p>
+    <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:10px">
+      <a class="btn primary" href="https://isyouraiuselegallydefensible.com" target="_blank" rel="noopener">Take the CLEAR™ Assessment →</a>
+      <a class="btn" href="https://yuniqueai.com" target="_blank" rel="noopener">Book a conversation with Yunique AI</a>
+    </div>
+    <p style="line-height:1.6;font-size:11px;color:var(--muted);margin-top:12px">Legally Defensible AI is a discipline, not a guarantee — of legality, of winning a dispute, of regulatory approval, or of immunity from enforcement.</p>
   </div>
 </div>
 </main>
@@ -432,7 +497,8 @@ const DATA = window.LAWS_DATA || [];
 const CASES = window.CASES_DATA || [];
 const FRAMEWORKS = [
  {yr:"2018",title:"Universal Guidelines for AI",issuer:"The Public Voice coalition (led by EPIC), Brussels",binding:"Non-binding — civil society",scope:"Global · cross-sector",summary:"The first widely-endorsed civil-society framework for AI, published October 2018 and backed by hundreds of experts and dozens of organisations — before governments had acted. It set out twelve principles to keep human rights at the centre of automated systems.",principles:["Right to transparency","Right to human determination","Identification obligation (know who is accountable)","Fairness","Assessment & accountability","Accuracy, reliability & validity","Data quality","Public safety","Cybersecurity","Prohibition on secret profiling","Prohibition on unitary (social) scoring","Termination obligation (ability to switch a system off)"],why:"The conceptual seedbed. Ideas first crystallised here — transparency, human determination, no social scoring — reappear in the OECD Principles and UNESCO Recommendation, and become enforceable rules in the EU AI Act.",full:"https://www.caidp.org/universal-guidelines-for-ai/",fullLabel:"Read the full guidelines + explanatory memorandum — CAIDP"},
- {yr:"2019",title:"OECD AI Principles & G20 AI Guidelines",issuer:"OECD (adopted 22 May 2019); endorsed by the G20 (June 2019)",binding:"Non-binding — intergovernmental standard",scope:"Global · 40+ adhering governments",summary:"The first intergovernmental AI standard. Five values-based principles for trustworthy AI plus five recommendations to governments; the G20 adopted them as the G20 AI Principles weeks later. Updated in 2024 to address generative AI.",principles:["Inclusive growth, sustainable development & well-being","Human-centred values & fairness","Transparency & explainability","Robustness, security & safety","Accountability","(+ government recommendations: R&D investment, digital ecosystem, enabling policy, human capacity, international co-operation)"],why:"The common vocabulary of AI governance. Its definition of an 'AI system' and its accountability language flowed directly into national strategies and the EU AI Act.",full:"https://legalinstruments.oecd.org/en/instruments/OECD-LEGAL-0449",fullLabel:"Read the full Recommendation — OECD Legal Instruments"},
+ {yr:"2019",title:"OECD AI Principles",issuer:"OECD — Recommendation of the Council on AI, adopted 22 May 2019 (updated May 2024)",binding:"Non-binding — intergovernmental standard",scope:"Global · 45+ adhering governments",summary:"The first intergovernmental AI standard: five values-based principles for trustworthy AI plus five recommendations to governments. Revised in May 2024 to address generative AI and sharpen the definition of an 'AI system'.",principles:["Inclusive growth, sustainable development & well-being","Human-centred values & fairness","Transparency & explainability","Robustness, security & safety","Accountability","(+ government recommendations: R&D investment, digital ecosystem, enabling policy, human capacity, international co-operation)"],why:"The common vocabulary of AI governance. Its definition of an 'AI system' and its accountability language flowed directly into national strategies, the G20 AI Principles and the EU AI Act.",full:"https://legalinstruments.oecd.org/en/instruments/OECD-LEGAL-0449",fullLabel:"Read the full Recommendation — OECD Legal Instruments"},
+ {yr:"2019",title:"G20 AI Principles",issuer:"G20 — Ministerial Statement on Trade & Digital Economy, June 2019; welcomed at the Osaka Leaders' Summit",binding:"Non-binding — political commitment",scope:"Global · G20 member economies",summary:"Weeks after the OECD Recommendation, G20 ministers endorsed a set of human-centred AI principles drawn directly from it — extending the same trustworthy-AI commitments to the world's largest economies, including non-OECD members such as China, India, Brazil, Indonesia and Saudi Arabia.",principles:["Human-centred AI, mirroring the OECD's five value-based principles","Inclusive growth, sustainable development & well-being","Human-centred values & fairness","Transparency & explainability; robustness, security & safety; accountability","Recommendation to co-operate internationally on responsible stewardship of trustworthy AI"],why:"The moment trustworthy-AI principles became a genuinely global baseline rather than an OECD-only consensus — bringing the major emerging economies into the same framework.",full:"https://www.mofa.go.jp/files/000486596.pdf",fullLabel:"Read the G20 AI Principles (Ministerial Statement, Annex) — MOFA Japan"},
  {yr:"2021",title:"UNESCO Recommendation on the Ethics of AI",issuer:"UNESCO — adopted by all 193 member states, November 2021",binding:"Non-binding — but near-universal adoption",scope:"Global",summary:"The first global standard-setting instrument on AI ethics, adopted unanimously by UNESCO's member states. Grounded in human rights and human dignity, it is notable for pairing high-level values with concrete tools that governments can actually apply.",principles:["Values: human rights & dignity; environment & ecosystems; diversity & inclusiveness; peaceful, just & interconnected societies","Practical tools: Readiness Assessment Methodology (RAM) and Ethical Impact Assessment (EIA)","Action across data governance, gender equality, environment, health, education & the economy"],why:"Moves ethics from principle to practice. Its RAM and EIA are used by governments worldwide, and its human-rights framing is what the Council of Europe treaty later makes binding.",full:"https://unesdoc.unesco.org/ark:/48223/pf0000381137",fullLabel:"Read the full Recommendation — UNESCO"},
  {yr:"2023",title:"NIST AI Risk Management Framework (AI RMF 1.0)",issuer:"US National Institute of Standards & Technology — NIST AI 100-1 (Jan 2023)",binding:"Voluntary framework",scope:"US-origin · used globally · cross-sector",summary:"A voluntary framework to help organisations identify and manage AI risks across the lifecycle. Built around four core functions — Govern, Map, Measure, Manage — with a companion Playbook and, from 2024, a Generative AI Profile. Practical and outcome-focused rather than prescriptive.",principles:["Core functions: Govern · Map · Measure · Manage","Characteristics of trustworthy AI: valid & reliable; safe; secure & resilient; accountable & transparent; explainable & interpretable; privacy-enhanced; fair (harmful bias managed)"],why:"The de facto operational standard for AI risk management — widely adopted by US enterprises, referenced by regulators and increasingly named in procurement. It turns high-level principles into a repeatable process.",full:"https://nvlpubs.nist.gov/nistpubs/ai/nist.ai.100-1.pdf",fullLabel:"Read the full framework (PDF) — NIST",readable:"https://www.nist.gov/itl/ai-risk-management-framework",readableLabel:"NIST landing page + Playbook"},
  {yr:"2023",title:"ISO/IEC 42001:2023 — AI Management System",issuer:"ISO / IEC — published December 2023",binding:"Voluntary · certifiable management-system standard",scope:"Global · any organisation building or using AI",summary:"The world's first certifiable AI management system (AIMS) standard — the 'ISO 27001 for AI'. It specifies requirements to establish, implement, maintain and continually improve an AI management system, enabling independent third-party certification of an organisation's AI governance.",principles:["Plan-Do-Check-Act management-system structure","AI policy, objectives, roles & governance","AI risk & impact assessments","Lifecycle controls (Annex A): data, transparency, human oversight & security","Continual improvement & auditability"],why:"The certifiable backbone organisations use to prove responsible AI governance to customers, regulators and auditors — and a practical route to evidencing conformity with obligations such as the EU AI Act. Pairs naturally with the NIST AI RMF.",full:"https://www.iso.org/standard/42001",fullLabel:"Official standard page — ISO (purchase required)"},
@@ -516,7 +582,7 @@ const PILLAR_DEF={
 };
 function gotoPillar(p){
   document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab==="clear"));
-  ["db","feeds","cases","foundations","clear","review","analytics","responsible","about"].forEach(n=>$("tab-"+n).style.display=n==="clear"?"":"none");
+  ["db","feeds","cases","sectors","foundations","clear","review","analytics","responsible","about"].forEach(n=>$("tab-"+n).style.display=n==="clear"?"":"none");
   renderClearPage();
   const sec=$("pil-"+p);
   if(sec){if(sec.scrollIntoView)sec.scrollIntoView({behavior:"smooth",block:"start"});sec.classList.remove("flash");void sec.offsetWidth;sec.classList.add("flash")}
@@ -524,7 +590,7 @@ function gotoPillar(p){
 document.addEventListener("click",e=>{const t=e.target.closest(".cltag");if(t&&t.dataset.p){e.stopPropagation();gotoPillar(t.dataset.p)}});
 function filterByPillar(p){
   document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab==="db"));
-  ["db","feeds","cases","foundations","clear","review","analytics","responsible","about"].forEach(n=>$("tab-"+n).style.display=n==="db"?"":"none");
+  ["db","feeds","cases","sectors","foundations","clear","review","analytics","responsible","about"].forEach(n=>$("tab-"+n).style.display=n==="db"?"":"none");
   state={...state,q:"",domain:"all",region:"all",stage:"all",cat:"all",ind:"all",pra:false};
   $("search").value="";$("fRegion").value="all";$("fStage").value="all";$("fCat").value="all";$("fInd").value="all";$("fPra").checked=false;
   document.querySelectorAll("#domainPills .pill").forEach(x=>x.classList.toggle("active",x.dataset.d==="all"));
@@ -578,6 +644,126 @@ function renderClearPage(){
     </div>`;
   }).join("");
   document.querySelectorAll(".pil-filter").forEach(b=>b.onclick=()=>filterByPillar(b.dataset.p));
+  renderClearXwalk();
+}
+const SECTORS=[
+ {key:"Financial services",name:"Financial services",hot:"The most heavily supervised AI use in the economy — credit, pricing, trading and fraud models are already in scope through existing rules.",regs:[
+   {n:"FCA (UK)",p:"No bespoke AI rules; AI is governed through existing frameworks (SM&amp;CR, Consumer Duty). Running AI Live Testing and the AI Sandbox, with the AI Consortium reporting in 2026.",u:"https://www.fca.org.uk/firms/innovation/artificial-intelligence-ai"},
+   {n:"PRA / Bank of England (UK)",p:"AI named in the PRA's 2026 supervisory priorities — expect scrutiny of model risk management (SS1/23), governance and validation.",u:"https://www.bankofengland.co.uk/prudential-regulation"},
+   {n:"SEC (US)",p:"AI in exam priorities and a dedicated AI Task Force (2025); pushing consistent AI-impact disclosure and watching for 'AI washing'.",u:"https://www.sec.gov/ai"},
+   {n:"NYDFS (US)",p:"Part 500 cyber rules plus AI-specific guidance (2024) and frontier-AI risk guidance (2026) for covered financial entities.",u:"https://www.dfs.ny.gov/industry-guidance/industry-letters/il20241016-cyber-risks-ai-and-strategies-combat-related-risks"},
+   {n:"EU (EBA · EIOPA · ESMA)",p:"AI credit scoring and life/health insurance pricing are high-risk under the EU AI Act; sectoral authorities are the supervisors.",u:"https://artificialintelligenceact.eu/"}]},
+ {key:"Healthcare",name:"Healthcare &amp; life sciences",hot:"AI diagnostics and clinical tools face medical-device regulation on top of heightened health-data privacy.",regs:[
+   {n:"FDA (US)",p:"Total-product-lifecycle approach: draft lifecycle guidance (Jan 2025) and final Predetermined Change Control Plan guidance (Aug 2025) for AI-enabled device software.",u:"https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-software-medical-device"},
+   {n:"MHRA (UK)",p:"AI Airlock — a regulatory sandbox for AI as a medical device (AIaMD), funded through 2029 and moving toward formal guidance.",u:"https://www.gov.uk/government/collections/ai-airlock-the-regulatory-sandbox-for-aiamd"},
+   {n:"OCR / ICO (US &amp; UK)",p:"Health data is PHI / special-category data: heightened privacy, security, transparency and lawful-basis duties (HIPAA, UK GDPR).",u:"https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/"}]},
+ {key:"Employment",name:"Employment &amp; HR",hot:"AI hiring and monitoring tools are the most litigated and fastest-regulated AI use — and they cut across every sector.",regs:[
+   {n:"EEOC (US)",p:"Withdrew its 2023 AI guidance (Jan 2025), but Title VII still applies and 'algorithmic discrimination' remains a 2026–28 enforcement priority.",u:"https://www.eeoc.gov/"},
+   {n:"ICO (UK)",p:"Draft automated-decision-making-in-recruitment guidance (2026) under the Data (Use and Access) Act: transparency, bias monitoring, data-subject rights.",u:"https://ico.org.uk/about-the-ico/what-we-do/recruitment-rewired/"},
+   {n:"US state laws",p:"A live patchwork — Colorado AI Act, NYC Local Law 144 bias audits, California ADS rules (Oct 2025), Illinois — each with its own audit and notice duties.",u:"https://artificialintelligenceact.eu/"}]},
+ {key:"Regulated professions",name:"Legal &amp; professional services",hot:"Professional-conduct duties — competence, confidentiality and supervision — already bind how firms use AI, regardless of statute.",regs:[
+   {n:"SRA (UK)",p:"Warning notice on misuse of AI: accuracy of citations, supervision and confidentiality. Solicitors remain responsible whether or not AI is used.",u:"https://www.sra.org.uk/solicitors/guidance/misuse-ai/"},
+   {n:"Law Society (UK)",p:"Practical guidance for firms on AI governance, risk management, client care and staff training.",u:"https://www.lawsociety.org.uk/topics/ai-and-lawtech"},
+   {n:"Courts (US &amp; UK)",p:"Judicial orders requiring disclosure and verification of AI-generated filings, with sanctions for fabricated citations.",u:"https://www.judiciary.uk/"}]},
+ {key:"Government",name:"Government &amp; public sector",hot:"Public bodies face the highest transparency bar — citizens can demand to know when a decision was made or supported by an algorithm.",regs:[
+   {n:"UK Government (GDS)",p:"AI Playbook for the UK Government (2025): ten principles for safe, responsible AI adoption across public bodies.",u:"https://www.gov.uk/government/publications/ai-playbook-for-the-uk-government"},
+   {n:"Algorithmic Transparency Recording Standard",p:"Public bodies must publish where and why algorithmic tools support decisions; a new iteration launched in 2025.",u:"https://www.gov.uk/government/collections/algorithmic-transparency-recording-standard-hub"},
+   {n:"EU / national",p:"Public-sector AI in benefits, policing and migration is high-risk under the EU AI Act, with fundamental-rights impact duties.",u:"https://artificialintelligenceact.eu/"}]}
+];
+function filterBySector(ind){
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab==="db"));
+  ["db","feeds","cases","sectors","foundations","clear","review","analytics","responsible","about"].forEach(n=>$("tab-"+n).style.display=n==="db"?"":"none");
+  state={...state,q:"",domain:"all",region:"all",stage:"all",cat:"all",ind:ind,pra:false,pillar:null};
+  const s=$("search");if(s)s.value="";
+  const fr=$("fRegion");if(fr)fr.value="all";
+  const fs=$("fStage");if(fs)fs.value="all";
+  const fc=$("fCat");if(fc)fc.value="all";
+  const fi=$("fInd");if(fi)fi.value=ind;
+  const fp=$("fPra");if(fp)fp.checked=false;
+  document.querySelectorAll("#domainPills .pill").forEach(x=>x.classList.toggle("active",x.dataset.d==="all"));
+  document.querySelectorAll("#clearPills .cpill").forEach(x=>x.classList.remove("active"));
+  renderAll();window.scrollTo({top:0,behavior:"smooth"});
+}
+function renderSectors(){
+  const host=$("sectorGrid"); if(!host) return;
+  host.innerHTML=SECTORS.map(sec=>{
+    const n=DATA.filter(x=>(x.ind||[]).includes(sec.key)).length;
+    const regs=sec.regs.map(r=>`<div style="padding:9px 0;border-top:0.5px solid var(--hair)">
+        <a href="${r.u}" target="_blank" rel="noopener" style="font-weight:700;font-size:12.5px;color:var(--plum);text-decoration:none">${r.n} ↗</a>
+        <div style="font-size:12px;color:#4e463c;line-height:1.55;margin-top:3px">${r.p}</div></div>`).join("");
+    return `<div class="panel">
+      <div class="ph"><h2>${sec.name}</h2></div>
+      <p style="font-size:13px;line-height:1.65;color:#4e463c;margin-bottom:6px">${sec.hot}</p>
+      <div style="font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-top:10px">Regulators to watch</div>
+      ${regs}
+      <div style="margin-top:14px">
+        <button class="btn primary sec-filter" data-ind="${sec.key}">See ${n} ${n===1?"instrument":"instruments"} for this sector →</button>
+      </div>
+    </div>`;
+  }).join("");
+  host.querySelectorAll(".sec-filter").forEach(b=>b.onclick=()=>filterBySector(b.dataset.ind));
+  const asel=$("alertSector");
+  if(asel&&!asel.dataset.init){asel.dataset.init="1";asel.innerHTML='<option value="">My sector…</option>'+SECTORS.map(s=>{const nm=s.name.replace(/&amp;/g,"&");return `<option value="${nm}">${nm}</option>`}).join("");}
+  const upd=()=>{const a=$("alertBtn");if(!a)return;const em=(($("alertEmail")||{}).value||"").trim();const sec=($("alertSector")||{}).value||"";const subj=encodeURIComponent("Governance Radar — alert sign-up"+(sec?" ("+sec+")":""));const body=encodeURIComponent("Please add me to the monthly Governance Radar alerts.\n\nSector: "+(sec||"—")+"\nEmail: "+(em||"—"));a.href="mailto:yunique@yuniqueai.com?subject="+subj+"&body="+body;};
+  ["alertEmail","alertSector"].forEach(id=>{const e=$(id);if(e&&!e.dataset.wired){e.dataset.wired="1";e.oninput=upd;}});
+  upd();
+}
+const PILLAR_COLOR={C:"#2f5aa8",L:"#b3243b",E:"#2f7d4f",A:"#6E4B63",R:"#c9701f"};
+const XWALK={
+ C:{u:["Transparency &amp; explainability"],
+    o:["Transparency &amp; explainability"],
+    eu:["Art 50 — AI-interaction &amp; AI-content disclosure","Art 13 — transparency to deployers"],
+    coe:["Art 8 — transparency &amp; oversight"]},
+ L:{u:["Responsibility &amp; accountability","Right to privacy &amp; data protection","Proportionality &amp; do no harm"],
+    o:["Accountability (rule-of-law grounding)"],
+    eu:["Art 99 — penalties up to €35m / 7% turnover","Arts 70–74 — enforcement &amp; market surveillance"],
+    coe:["Art 9 — accountability","Art 14 — effective remedies","Art 15 — procedural safeguards"]},
+ E:{u:["Awareness &amp; literacy","Multi-stakeholder &amp; adaptive governance"],
+    o:["Building human capacity","Investing in AI R&amp;D","Enabling ecosystem &amp; policy"],
+    eu:["Art 4 — AI literacy","Arts 57–61 — regulatory sandboxes"],
+    coe:["Art 20 — digital literacy &amp; skills"]},
+ A:{u:["Responsibility &amp; accountability","Human oversight &amp; determination"],
+    o:["Accountability"],
+    eu:["Art 9 — risk management","Art 11 / Annex IV — technical docs","Art 27 — fundamental-rights impact assessment","Art 43 — conformity assessment","Art 72 — post-market monitoring"],
+    coe:["Art 9 — accountability","Art 16 — risk &amp; impact management framework"]},
+ R:{u:["Proportionality &amp; do no harm","Safety &amp; security","Fairness &amp; non-discrimination","Sustainability","Human oversight &amp; determination"],
+    o:["Robustness, security &amp; safety","Human-centred values &amp; fairness","Inclusive growth &amp; well-being"],
+    eu:["Art 5 — prohibited practices","Art 6+ — high-risk requirements","Art 14 — human oversight","Arts 51–55 — GPAI systemic risk"],
+    coe:["Art 7 — human dignity &amp; autonomy","Art 10 — equality &amp; non-discrimination","Art 11 — privacy","Arts 12–13 — reliability &amp; safe innovation"]}
+};
+function renderClearXwalk(){
+  const host=$("clearXwalk"); if(!host) return;
+  const softPill=t=>`<span style="display:inline-block;font-size:11.5px;line-height:1.35;padding:3px 9px;margin:0 4px 4px 0;border-radius:20px;background:transparent;color:#6b6357;border:1px dashed #c2b8a8">${t}</span>`;
+  const bindPill=t=>`<span style="display:inline-block;font-size:11.5px;line-height:1.4;padding:4px 10px;margin:0 4px 4px 0;border-radius:20px;background:var(--plum);color:#fff;border:1px solid var(--plumdark);font-weight:500">${t}</span>`;
+  const col=(label,items,fn)=>`<div style="flex:1 1 150px;min-width:150px">
+      <div style="font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:5px">${label}</div>
+      <div>${items.map(fn).join("")}</div></div>`;
+  host.innerHTML=Object.entries(PILLARS).map(([p,name])=>{
+    const x=XWALK[p], c=PILLAR_COLOR[p];
+    return `<div style="display:grid;grid-template-columns:52px 1fr;background:var(--card);border:0.5px solid var(--hair);border-radius:12px;overflow:hidden">
+      <div style="background:${c};color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:24px;font-weight:700">${p}</div>
+      <div style="padding:13px 15px">
+        <div style="font-size:14.5px;font-weight:600;color:var(--ink)">${name}</div>
+        <div style="font-size:12px;color:var(--muted);font-style:italic;margin:2px 0 12px">${PILLAR_DEF[p].q}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px">
+          <div style="flex:1 1 260px;min-width:230px;background:var(--paper);border:0.5px solid var(--hair);border-radius:8px;padding:10px 12px">
+            <div style="margin-bottom:9px"><span style="display:inline-block;font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:2px 9px;border-radius:12px;border:1px dashed #c2b8a8;color:#6b6357">Soft law · guidance</span></div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">
+              ${col("UNESCO (2021)",x.u,softPill)}
+              ${col("OECD (2019)",x.o,softPill)}
+            </div>
+          </div>
+          <div style="flex:1 1 260px;min-width:230px;background:var(--plumbg);border:0.5px solid #e0c6d8;border-left:3px solid var(--plum);border-radius:8px;padding:10px 12px">
+            <div style="margin-bottom:9px"><span style="display:inline-block;font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:2px 9px;border-radius:12px;background:var(--plum);color:#fff">⚖ Binding law · enforceable</span></div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">
+              ${col("EU AI Act",x.eu,bindPill)}
+              ${col("CoE Convention",x.coe,bindPill)}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
 }
 const store={get(){try{return localStorage.getItem("urit-state")}catch(e){return null}},set(v){try{localStorage.setItem("urit-state",v)}catch(e){}}};
 let state=JSON.parse(store.get()||"{}");
@@ -718,9 +904,10 @@ function renderAll(){renderRadar();renderTable();updatePillarBanner();save()}
 
 document.querySelectorAll(".nav button").forEach(t=>t.onclick=()=>{
   document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));t.classList.add("active");
-  ["db","feeds","cases","foundations","clear","review","analytics","responsible","about"].forEach(n=>$("tab-"+n).style.display=t.dataset.tab===n?"":"none");
+  ["db","feeds","cases","sectors","foundations","clear","review","analytics","responsible","about"].forEach(n=>$("tab-"+n).style.display=t.dataset.tab===n?"":"none");
   if(t.dataset.tab==="analytics")setTimeout(renderAnalytics,50);
   if(t.dataset.tab==="clear")renderClearPage();
+  if(t.dataset.tab==="sectors")renderSectors();
   if(t.dataset.tab==="review")renderReview();
 });
 let charts={};
@@ -848,7 +1035,7 @@ if(state.win!==180){document.querySelectorAll(".winbtns button").forEach(x=>x.cl
 $("search").value=state.q;$("fRegion").value=state.region;$("fJur").value=state.jur;$("fStage").value=state.stage;$("fCat").value=state.cat;$("fInd").value=state.ind;$("fPra").checked=state.pra;
 if(state.q||state.region!=="all"||state.jur!=="all"||state.stage!=="all"||state.cat!=="all"||state.ind!=="all"||state.pra)$("filters").classList.add("open");
 
-const cb=$("clearBand");if(cb)cb.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab==="clear"));["db","feeds","cases","foundations","clear","review","analytics","responsible","about"].forEach(n=>$("tab-"+n).style.display=n==="clear"?"":"none");renderClearPage()};
+const cb=$("clearBand");if(cb)cb.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.tab==="clear"));["db","feeds","cases","sectors","foundations","clear","review","analytics","responsible","about"].forEach(n=>$("tab-"+n).style.display=n==="clear"?"":"none");renderClearPage()};
 
 // ---- Sync now: trigger the monitoring digest on demand from inside the app ----
 const SYNC_TASK="monday-regulatory-digest";
